@@ -14,7 +14,6 @@
   },
   "homepage": "https://github.com/KeiserCorp/eChip-Portal-Tool#readme",
   "dependencies": {
-    "q": "^1.4.1",
     "1-wire-js": "^1.0.0"
   },
   "devDependencies": {

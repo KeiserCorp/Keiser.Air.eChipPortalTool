@@ -18,7 +18,8 @@
   },
   
   "permissions": [
-    "usb"
+    "usb",
+	"webview"
     ],
   "optional_permissions": [
     {"usbDevices": [
