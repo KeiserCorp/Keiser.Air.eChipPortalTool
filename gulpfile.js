@@ -7,14 +7,18 @@ var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var util = require('gulp-util');
 
-var jsDir = './js/';
+var srcDir = './src/';
 var appDir = './app/';
-var mainjs = jsDir + 'main.js';
+var mainScript = srcDir + 'main.js';
 var production = !!util.env.production;
 
+if (production){
+	process.env.NODE_ENV = 'production';
+}
+
 gulp.task('bundle', function () {
-	browserify(mainjs).bundle()
-	.pipe(source(mainjs))
+	browserify(mainScript).bundle()
+	.pipe(source(mainScript))
 	.pipe(production ? streamify(uglify()) : util.noop())
 	.pipe(rename({
 			dirname : "/",
@@ -28,5 +32,5 @@ gulp.task('default', function () {
 });
 
 gulp.task('watch', function () {
-	gulp.watch(mainjs, ['bundle']);
+	gulp.watch(srcDir + '**/*.js', ['bundle']);
 });

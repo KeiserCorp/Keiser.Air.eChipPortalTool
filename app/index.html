@@ -9,8 +9,16 @@
 </head>
 
 <body>
-	<div id="webPortalWrapper"><webview id="webPortal" src=""></webview></div>
-	<div id="toolBar"><button id="requestPermission">Request Permissions</button></div>
+	<div id="webPortalWrapper">
+		<webview id="webPortal" src=""></webview>
+	</div>
+	<div id="toolBar">
+		<div id="app">
+		  {{ message }}
+		</div>
+		<button id="requestPermission">Request Permissions</button>
+	</div>
+	
 	<script src="bundle.js"></script>
 </body>
 </html>
