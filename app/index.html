@@ -12,12 +12,23 @@
 	<div id="webPortalWrapper">
 		<webview id="webPortal" src=""></webview>
 	</div>
-	<div id="toolBar">
-		<div id="app">
-		  {{ message }}
+	<nav id="toolBar" class="uk-navbar">
+		<a href="" class="uk-navbar-brand">
+			<span class="keiserFont"><span class="keiserKPadding">K</span>EISER®</span>
+		</a>
+		<ul class="uk-navbar-nav">
+			<li><a href="">{{ message }}</a></li>
+			<li><a href="">...</a></li>
+			<li class="uk-parent"><a href="">...</a></li>
+		</ul>
+		<div class="uk-navbar-flip">
+			<ul class="uk-navbar-nav">
+				<li>
+					<a href=""><i class="uk-icon-gear uk-icon-medium"></i></a>
+				</li>
+			</ul>
 		</div>
-		<button id="requestPermission">Request Permissions</button>
-	</div>
+	</nav>
 	
 	<script src="bundle.js"></script>
 </body>

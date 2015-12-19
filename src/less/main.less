@@ -16,7 +16,7 @@ html, body {
 	width: 100%;
 	margin: 0;
 	padding: 0;
-	height: ~"calc(100% - 40px)";
+	height: ~"calc(100% - 43px)";
 }
 
 #webPortal{
@@ -28,8 +28,27 @@ html, body {
 
 #toolBar{
 	width: 100%;
-	height:40px;
+	height:41px;
 	margin: 0;
 	padding: 0;
-	background-color:grey;
+	border-radius: 0;
+}
+
+@font-face {
+    font-family: 'Keiser';
+    src: url("/fonts/keiser-webfont.eot");
+    src: url("/fonts/keiser-webfont.eot") format("embedded-opentype"), url("/fonts/keiser-webfont.woff") format("woff"), url("/fonts/keiser-webfont.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+.keiserFont {
+    font-family: 'Keiser';
+    color: #CE0000;
+	font-size: 120%;
+    line-height: 2;
+}
+
+.keiserKPadding {
+    letter-spacing: -0.1em;
 }

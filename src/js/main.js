@@ -11,7 +11,7 @@ window.onload = function () {
 }
 
 new Vue({
-  el: '#app',
+  el: 'body',
   data: {
     message: 'Hello Vue.js!'
   }
