@@ -6,6 +6,7 @@ var browserify = require('browserify');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var util = require('gulp-util');
+var minifyCss = require('gulp-minify-css');
 
 var less = require('gulp-less');
 
@@ -39,6 +40,7 @@ gulp.task('js-bundle', function () {
 gulp.task('css-bundle', function () {
 	return gulp.src(mainStyle)
 	.pipe(less())
+	.pipe(production ? minifyCss() : util.noop())
 	.pipe(rename({
 			dirname : "/",
 			basename : "bundle"
