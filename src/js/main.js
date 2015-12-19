@@ -1,6 +1,8 @@
 'use strict';
-var ow = require('1-wire-js');
+window.jQuery = require('jquery');
+var UIKit = require('uikit');
 var Vue = require('vue');
+var OW = require('1-wire-js');
 
 var webPortal = document.getElementById('webPortal');
 
