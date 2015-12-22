@@ -1,10 +1,14 @@
 'use strict';
 var $ = window.jQuery = require('jquery');
-var UIKit = require('uikit');
+var UIkit = require('uikit');
 var Vue = require('vue');
 var eChip = require('./echip.js');
 
-const DEFAULT_HOME = 'http://devxer.com/1w/index.html';
+const DEFAULT_HOME = 'http://devx.keiser.com/echip';
+const ACTIONS = {
+	ECHIP_SET : 'echip-set',
+	ECHIP_GET : 'echip-get'
+};
 
 (function () {
 
@@ -26,7 +30,8 @@ const DEFAULT_HOME = 'http://devxer.com/1w/index.html';
 	var webPortalState = {
 		connected : false,
 		initialized : false,
-		target : ''
+		target : '',
+		actions : []
 	};
 
 	var webPortalTargetDomain = function () {
@@ -42,6 +47,7 @@ const DEFAULT_HOME = 'http://devxer.com/1w/index.html';
 	}
 
 	var webPortalInitialize = function () {
+		window.addEventListener('message', webPortalMessageDispatch.receive);
 		webPortal.request.onCompleted.addListener(webPortalRequestEvent, {
 			urls : [webPortalTargetDomain()]
 		});
@@ -53,18 +59,106 @@ const DEFAULT_HOME = 'http://devxer.com/1w/index.html';
 			webPortalState.connected = false;
 			webPortalState.initialized = false;
 			webPortalState.target = requestDetails.url;
+			webPortalState.actions = [];
 			setTimeout(webPortalConnect, 250);
 		}
 	};
 
 	var webPortalConnect = function () {
-		webPortal.contentWindow.postMessage("{action: 'connect'}", webPortalState.target);
+		var message = webPortalMessageSendRequest('connect', null, webPortalConnectionAccepted);
 		webPortalState.initialized = true;
+	};
+
+	var webPortalConnectionAccepted = function (messageObject) {
+		if (messageObject.action && webPortalState.action == 'connect') {
+			webPortalState.connected = true;
+			webPortalState.actions = (messageObject.data.actions || []);
+		}
 	};
 
 	var webPortalGoHome = function () {
 		webPortal.src = settings.homePage;
 	};
+
+	/*
+	 *	Web Portal Message Handlers
+	 */
+	var webPortalMessageCounter = 1;
+	var webPortalMessageGetID = function () {
+		return webPortalMessageCounter++;
+	}
+
+	var webPortalMessageGenerator = function () {
+		return {
+			id : null,
+			type : null,
+			action : null,
+			data : null
+		}
+	};
+
+	var webPortalMessageRequestGenerator = function (action, data) {
+		var message = webPortalMessageGenerator();
+		message.id = webPortalMessageGetID();
+		message.type = 'request';
+		message.action = action;
+		message.data = data;
+		return message;
+	};
+
+	var webPortalMessageResponseGenerator = function (requestMessage, action, data) {
+		var message = webPortalMessageGenerator();
+		message.id = requestMessage.id;
+		message.type = 'response';
+		message.action = action;
+		message.data = data;
+		return message;
+	};
+
+	var webPortalMessageDispatchGenerator = function (requestReceiver) {
+		var mt = {};
+		var messages = {};
+
+		mt.send = function (messageObject, callback) {
+			if (messageObject.type == 'request' && callback) {
+				messages[messageObject.id] = callback;
+			}
+			webPortal.contentWindow.postMessage(JSON.stringify(messageObject), webPortalState.target);
+		};
+
+		mt.receive = function (messageEvent) {
+			var messageObject = JSON.parse(messageEvent.data);
+			if (!messageObject.id || !messageObject.type) {
+				return;
+			}
+			if (messageObject.type == 'response' && messages[messageObject.id]) {
+				messages[messageObject.id](messageObject);
+			} else if (messageObject.type == 'request') {
+				requestReceiver(messageObject);
+			}
+		}
+
+		mt.clear = function () {
+			messages = {};
+		};
+		return mt;
+	};
+
+	var webPortalMessageSendRequest = function (action, data, callback) {
+		var messageObject = webPortalMessageRequestGenerator(action, data);
+		webPortalMessageDispatch.send(messageObject, callback);
+	};
+
+	var webPortalMessageSendResponse = function (requestMessage, action, data, callback) {
+		var messageObject = webPortalMessageResponseGenerator(requestMessage, action, data);
+		webPortalMessageDispatch.send(messageObject, callback);
+	};
+
+	var webPortalMessageRequestReceiver = function (messageObject) {
+		console.log(messageObject);
+	};
+
+	var webPortalMessageDispatch = webPortalMessageDispatchGenerator(webPortalMessageRequestReceiver);
 
 	/*
 	 *	Settings
@@ -105,7 +199,8 @@ const DEFAULT_HOME = 'http://devxer.com/1w/index.html';
 	var toolBarVue = new Vue({
 			el : '#tool-bar',
 			data : {
-				'eChipStatus' : eChip.status
+				'eChipStatus' : eChip.status,
+				'webPortalState' : webPortalState
 			},
 			methods : {
 				goHome : function () {
@@ -114,9 +209,31 @@ const DEFAULT_HOME = 'http://devxer.com/1w/index.html';
 				getPermission : function () {
 					eChip.requestPermission();
 				},
-				keyRead : function () {
-					eChip.keyRead();
+				keyUpload : function () {
+					webPortalSendEChip();
 				},
+				keyClear : function () {
+					eChip.keyClear();
+				}
+			}
+		});
+
+	/*
+	 *	Confirm Erase Modal Binding
+	 */
+	var confirmEraseModal = new Vue({
+			el : '#confirm-erase-modal',
+			data : {
+				'eChipKeyState' : eChip.keyState
+			},
+			computed : {
+				keyID : function () {
+					if (this.eChipKeyState.rom) {
+						return this.eChipKeyState.rom.toHexString();
+					}
+				}
+			},
+			methods : {
 				keyClear : function () {
 					eChip.keyClear();
 				}
@@ -199,10 +316,23 @@ const DEFAULT_HOME = 'http://devxer.com/1w/index.html';
 				}
 			},
 			methods : {
-				keyRead : function () {
-					eChip.keyRead();
+				keyRefresh : function () {
+					eChip.keyRefresh();
 				}
 			}
 		});
+
+	/*
+	 *	eChip to Web Portal Actions
+	 */
+	var webPortalSendEChip = function () {
+		eChip.keyRead(function (eChipData) {
+			var messageData = {
+				id : eChipData.rom.toHexString(),
+				machines : eChipData.parsedData
+			}
+			webPortalMessageSendRequest(ACTIONS.ECHIP_SET, messageData);
+		});
+	};
 
 })();
