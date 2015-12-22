@@ -6,30 +6,62 @@
 	<title>Keiser eChip Portal Tool</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="bundle.css">
+	<script src="bundle.js" defer></script>
 </head>
 
 <body>
-	<div id="webPortalWrapper">
-		<webview id="webPortal" src=""></webview>
+	<div id="settings-modal" class="uk-modal">
+		<div class="uk-modal-dialog">
+			<div class="uk-modal-header">
+				<h1>Settings</h1>
+			</div>
+				<form class="uk-form uk-form-stacked">
+					<div class="uk-form-row">
+						<div class="uk-form-controls">
+							<a href="#default" class="uk-float-right" v-on:click="setDefault()">Default</a>
+						</div>
+						<label class="uk-form-label" for="settings-home-page">Home Page</label>
+						<div class="uk-form-controls">
+							<input type="text" class="uk-form-width-large" id="settings-home-page" v-model="homePage" v-bind:class="{ 'uk-form-success': homePageValid, 'uk-form-danger': !homePageValid }"/>
+						</div>
+					</div>
+				</form>
+			<div class="uk-modal-footer">
+				<button class="uk-button uk-modal-close">Cancel</button>
+				<button class="uk-button uk-button-primary uk-float-right uk-modal-close" v-on:click="save()" :disabled="!settingsValid">
+					<i class="uk-icon-save"></i> Save
+				</button>
+			</div>
+		</div>
 	</div>
-	<nav id="toolBar" class="uk-navbar">
+	
+	<div id="web-portal-wrapper">
+		<webview id="web-portal" src=""></webview>
+	</div>
+	
+	<nav id="tool-bar" class="uk-navbar">
 		<a href="" class="uk-navbar-brand">
-			<span class="keiserFont"><span class="keiserKPadding">K</span>EISER®</span>
+			<span class="keiser-font"><span class="keiser-k-padding">K</span>EISER®</span>
 		</a>
 		<ul class="uk-navbar-nav">
-			<li><a href="">{{ message }}</a></li>
-			<li><a href="">...</a></li>
-			<li class="uk-parent"><a href="">...</a></li>
+			<li><a href="">[1]</a></li>
+			<li><a href="">[2]</a></li>
+			<li class="uk-parent"><a href="">[3]</a></li>
 		</ul>
 		<div class="uk-navbar-flip">
 			<ul class="uk-navbar-nav">
 				<li>
-					<a href=""><i class="uk-icon-gear uk-icon-medium"></i></a>
+					<a href="#home" v-on:click="goHome()">
+						<i class="uk-icon-home uk-icon-medium"></i>
+					</a>
+				</li>
+				<li>
+					<a href="#settings-modal" data-uk-modal="{center:true}">
+						<i class="uk-icon-gear uk-icon-medium"></i>
+					</a>
 				</li>
 			</ul>
 		</div>
 	</nav>
-	
-	<script src="bundle.js"></script>
 </body>
 </html>
