@@ -2,7 +2,7 @@
 var $ = window.jQuery = require('jquery');
 var UIKit = require('uikit');
 var Vue = require('vue');
-var OW = require('1-wire-js');
+var eChip = require('./echip.js');
 
 const DEFAULT_HOME = 'http://devxer.com/1w/index.html';
 
@@ -11,10 +11,10 @@ const DEFAULT_HOME = 'http://devxer.com/1w/index.html';
 	/*
 	 *	Initialization
 	 */
-
 	var windowInitialize = function () {
 		settingsLoad();
 		webPortalInitialize();
+		eChip.initialize();
 	};
 
 	window.onload = windowInitialize;
@@ -69,7 +69,7 @@ const DEFAULT_HOME = 'http://devxer.com/1w/index.html';
 	/*
 	 *	Settings
 	 */
-	var settingsDefaults = {
+	const settingsDefaults = {
 		homePage : DEFAULT_HOME
 	};
 
@@ -100,13 +100,26 @@ const DEFAULT_HOME = 'http://devxer.com/1w/index.html';
 	};
 
 	/*
-	 * Tool Bar UI Binding
+	 *	Tool Bar UI Binding
 	 */
-
 	var toolBarVue = new Vue({
 			el : '#tool-bar',
+			data : {
+				'eChipStatus' : eChip.status
+			},
 			methods : {
-				goHome : webPortalGoHome
+				goHome : function () {
+					webPortalGoHome();
+				},
+				getPermission : function () {
+					eChip.requestPermission();
+				},
+				keyRead : function () {
+					eChip.keyRead();
+				},
+				keyClear : function () {
+					eChip.keyClear();
+				}
 			}
 		});
 
@@ -124,20 +137,20 @@ const DEFAULT_HOME = 'http://devxer.com/1w/index.html';
 	var settingsVue = new Vue({
 			el : '#settings-modal',
 			data : settingsVueSettings,
-			methods : {
-				save : function () {
-					settingsVueSaveSettings();
-				},
-				setDefault : function () {
-					settingsVueCloneDefaultSettings();
-				}
-			},
 			computed : {
 				homePageValid : function () {
 					return validUrl(this.homePage);
 				},
 				settingsValid : function () {
 					return validSettings(this);
+				}
+			},
+			methods : {
+				save : function () {
+					settingsVueSaveSettings();
+				},
+				setDefault : function () {
+					settingsVueCloneDefaultSettings();
 				}
 			}
 		});
@@ -154,5 +167,42 @@ const DEFAULT_HOME = 'http://devxer.com/1w/index.html';
 	var settingsVueCloneDefaultSettings = function () {
 		$.extend(settingsVueSettings, settingsDefaults);
 	};
+
+	/*
+	 *	eChip Modal Binding
+	 */
+	var eChipModalVue = new Vue({
+			el : '#echip-modal',
+			data : {
+				'eChipKeyState' : eChip.keyState,
+				'eChipStatus' : eChip.status
+			},
+			computed : {
+				keyID : function () {
+					if (this.eChipKeyState.rom) {
+						return this.eChipKeyState.rom.toHexString();
+					}
+				},
+				keyData : function () {
+					if (this.eChipKeyState.data) {
+						var output = '';
+						var page = 0;
+						this.eChipKeyState.data.forEach(function (row) {
+							output += '[' + ('000' + (page++)).substr(-3) + '] ';
+							row.forEach(function (column) {
+								output += ('00' + column.toString(16)).substr(-2).toUpperCase();
+							});
+							output += '\n';
+						});
+						return output;
+					}
+				}
+			},
+			methods : {
+				keyRead : function () {
+					eChip.keyRead();
+				}
+			}
+		});
 
 })();

@@ -22,16 +22,35 @@
 						</div>
 						<label class="uk-form-label" for="settings-home-page">Home Page</label>
 						<div class="uk-form-controls">
-							<input type="text" class="uk-form-width-large" id="settings-home-page" v-model="homePage" v-bind:class="{ 'uk-form-success': homePageValid, 'uk-form-danger': !homePageValid }"/>
+							<input type="text" class="uk-form-width-large" id="settings-home-page" placeholder="http://www.keiser.com" v-model="homePage" v-bind:class="{ 'uk-form-success': homePageValid, 'uk-form-danger': !homePageValid }">
 						</div>
 					</div>
 				</form>
 			<div class="uk-modal-footer">
 				<button class="uk-button uk-modal-close">Cancel</button>
-				<button class="uk-button uk-button-primary uk-float-right uk-modal-close" v-on:click="save()" :disabled="!settingsValid">
-					<i class="uk-icon-save"></i> Save
-				</button>
+				<button class="uk-button uk-button-primary uk-float-right uk-modal-close" v-on:click="save()" :disabled="!settingsValid">Save</button>
 			</div>
+		</div>
+	</div>
+	
+	<div id="echip-modal" class="uk-modal">
+		<div class="uk-modal-dialog">
+			<a class="uk-modal-close uk-close"></a>
+			<h1>eChip Information</h1>
+			<a href="#refresh" class="uk-float-right" v-on:click="keyRead()">
+				<i class="uk-icon-refresh" v-bind:class="{ 'uk-icon-spin': eChipStatus.keyAction != '' }"></i>
+			</a>
+			<p><strong>ID: </strong>{{ keyID }}<br>
+			<strong>State: </strong>
+			<template v-if="eChipStatus.keyConnected">
+				<template v-if="eChipStatus.keyAction == ''">Idle</template>
+				<template v-if="eChipStatus.keyAction == 'get'">Reading</template>
+				<template v-if="eChipStatus.keyAction == 'set'">Writing</template>
+				<template v-if="eChipStatus.keyAction == 'clear'">Erasing</template>
+			</template>
+			<template v-if="!eChipStatus.keyConnected">Disconnected</template>
+			</p>
+			<div class="uk-overflow-container"><pre>{{ keyData }}</pre></div>
 		</div>
 	</div>
 	
@@ -40,27 +59,46 @@
 	</div>
 	
 	<nav id="tool-bar" class="uk-navbar">
-		<a href="" class="uk-navbar-brand">
+		<span class="uk-navbar-brand">
 			<span class="keiser-font"><span class="keiser-k-padding">K</span>EISER®</span>
-		</a>
-		<ul class="uk-navbar-nav">
-			<li><a href="">[1]</a></li>
-			<li><a href="">[2]</a></li>
-			<li class="uk-parent"><a href="">[3]</a></li>
+		</span>
+		<ul class="uk-navbar-nav" v-show="!eChipStatus.permissionGranted">
+			<li><a href="#find" v-on:click="getPermission()"><i class="uk-icon-search"></i> Find eChip Reader</a></li>
+		</ul>
+		<ul class="uk-navbar-nav" v-show="eChipStatus.keyConnected">
+			<li><a href="#echip-modal" class="uk-navbar-nav-subtitle" data-uk-modal="{center:true}">
+			eChip <template v-if="eChipStatus.keyAction != ''"><i class="uk-icon-spinner uk-icon-spin"></i></template>
+			<template v-if="eChipStatus.keyAction == ''"><i class="uk-icon-spacer"></i></template>
+			<div>
+			<template v-if="eChipStatus.keyAction == ''">Connected</template>
+			<template v-if="eChipStatus.keyAction == 'get'">Reading</template>
+			<template v-if="eChipStatus.keyAction == 'set'">Writing</template>
+			<template v-if="eChipStatus.keyAction == 'clear'">Erasing</template>
+			</div>
+			</a></li>
+			<li><a href="#key-upload" class="uk-navbar-nav-subtitle" v-on:click="keyRead()"><i class="uk-icon-cloud-upload"></i> Upload<div class="uk-text-center">to Cloud</div></a></li>
+			<li><a href="#key-download" class="uk-navbar-nav-subtitle" v-on:click=""><i class="uk-icon-download"></i> Download<div class="uk-text-center">to eChip</div></a></li>
+			<li><a href="#key-clear" class="uk-navbar-nav-subtitle" v-on:click="keyClear()"><i class="uk-icon-eraser"></i> Erase<div class="uk-text-center">eChip</div></a></li>
 		</ul>
 		<div class="uk-navbar-flip">
 			<ul class="uk-navbar-nav">
 				<li>
-					<a href="#home" v-on:click="goHome()">
-						<i class="uk-icon-home uk-icon-medium"></i>
+					<a href="#home" class="uk-navbar-nav-subtitle uk-text-center" v-on:click="goHome()">
+						<i class="uk-icon-home uk-icon-small"></i>
+						<div>Home Page</div>
 					</a>
 				</li>
 				<li>
-					<a href="#settings-modal" data-uk-modal="{center:true}">
-						<i class="uk-icon-gear uk-icon-medium"></i>
+					<a href="#settings-modal" class="uk-navbar-nav-subtitle uk-text-center" data-uk-modal="{center:true}">
+						<i class="uk-icon-gear uk-icon-small"></i>
+						<div>Settings</div>
 					</a>
 				</li>
 			</ul>
+		</div>
+		<div class="uk-navbar-content uk-navbar-center uk-text-large" v-show="eChipStatus.permissionGranted && !eChipStatus.keyConnected">
+			<span v-show="!eChipStatus.deviceConnected" class="uk-text-danger"><i class="uk-icon-warning"></i> No eChip Reader Detected</span>
+			<span v-show="eChipStatus.deviceConnected">Waiting for eChip</span>
 		</div>
 	</nav>
 </body>
