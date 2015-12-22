@@ -15,7 +15,7 @@
 			<div class="uk-modal-header">
 				<h1>Settings</h1>
 			</div>
-				<form class="uk-form uk-form-stacked">
+				<form class="uk-form uk-form-stacked" v-on:submit.prevent>
 					<div class="uk-form-row">
 						<div class="uk-form-controls">
 							<a href="#default" class="uk-float-right" v-on:click="setDefault()">Default</a>
