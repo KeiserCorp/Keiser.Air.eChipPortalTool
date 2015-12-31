@@ -24,6 +24,8 @@ var fontFiles = [
 var production = !!util.env.production;
 if (production) {
 	process.env.NODE_ENV = 'production';
+} else {
+	process.env.NODE_ENV = 'development';
 }
 
 gulp.task('js-bundle', function () {

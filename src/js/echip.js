@@ -129,23 +129,16 @@ module.exports = function () {
 	}
 	();
 
-	var keyMonitor = function (count) {
-		if (!count) {
-			var count = 1;
-		}
+	var keyMonitor = function () {
 		setTimeout(function () {
-			if (count == 5 || keyMonitorQueue.hasNext()) {
-				ow.keySearchFirst().then(function (rom) {
-					if (romsAreEqual(rom, eChip.keyState.rom)) {
-						keyMonitorQueue.runNext(keyMonitor);
-					} else {
-						keyAwait();
-					}
-				}, keyAwait);
-			} else {
-				keyMonitor(count + 1);
-			}
-		}, 50);
+			ow.keySearchFirst().then(function (rom) {
+				if (romsAreEqual(rom, eChip.keyState.rom)) {
+					keyMonitorQueue.runNext(keyMonitor);
+				} else {
+					keyAwait();
+				}
+			}, keyAwait);
+		}, 500);
 	};
 
 	var romsAreEqual = function (rom1, rom2) {
@@ -158,6 +151,7 @@ module.exports = function () {
 			if (rom[0] === 0x0C) {
 				eChip.keyState.rom = rom;
 				eChip.status.keyConnected = true;
+				eChip.keyRefresh();
 				keyMonitor();
 			} else {
 				keyAwait();
@@ -230,7 +224,11 @@ module.exports = function () {
 	eChip.keyRead = function (callback) {
 		if (!eChip.keyState.data) {
 			keyMonitorQueue.add(function () {
-				return keyGetData().then(callback);
+				if (!eChip.keyState.data) {
+					return keyGetData().then(callback);
+				} else {
+					return callback(eChip.keyState);
+				}
 			});
 		} else {
 			callback(eChip.keyState);

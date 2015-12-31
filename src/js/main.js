@@ -70,7 +70,7 @@ const ACTIONS = {
 	};
 
 	var webPortalConnectionAccepted = function (messageObject) {
-		if (messageObject.action && webPortalState.action == 'connect') {
+		if ((messageObject || {}).action && messageObject.action == 'connect') {
 			webPortalState.connected = true;
 			webPortalState.actions = (messageObject.data.actions || []);
 		}
@@ -164,7 +164,8 @@ const ACTIONS = {
 	 *	Settings
 	 */
 	const settingsDefaults = {
-		homePage : DEFAULT_HOME
+		homePage : DEFAULT_HOME,
+		eraseOnUpload : false
 	};
 
 	var settings = $.extend({}, settingsDefaults);
@@ -201,6 +202,14 @@ const ACTIONS = {
 			data : {
 				'eChipStatus' : eChip.status,
 				'webPortalState' : webPortalState
+			},
+			computed : {
+				uploadReady : function () {
+					return (this.webPortalState.actions.indexOf('echip-set') > -1);
+				},
+				downloadReady : function () {
+					return (this.webPortalState.actions.indexOf('echip-get') > -1);
+				}
 			},
 			methods : {
 				goHome : function () {
@@ -331,8 +340,16 @@ const ACTIONS = {
 				id : eChipData.rom.toHexString(),
 				machines : eChipData.parsedData
 			}
-			webPortalMessageSendRequest(ACTIONS.ECHIP_SET, messageData);
+			webPortalMessageSendRequest(ACTIONS.ECHIP_SET, messageData, webPortalSendEChipResponse);
 		});
+	};
+
+	var webPortalSendEChipResponse = function (messageObject) {
+		if ((messageObject || {}).data && messageObject.data.success) {
+			if (settings.eraseOnUpload) {
+				eChip.keyClear();
+			}
+		}
 	};
 
 })();

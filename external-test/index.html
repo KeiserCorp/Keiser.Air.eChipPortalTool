@@ -37,6 +37,18 @@
 				sendMessage(responseMessageObject);
 			}
 			
+			if (messageObject.type == 'request' && messageObject.action == 'echip-set'){
+				var responseMessageObject = {
+					id : messageObject.id,
+					type : 'response',
+					action : 'echip-set',
+					data : {
+						success : true
+					}
+				};
+				sendMessage(responseMessageObject);
+			}
+			
 			output.innerHTML = syntaxHighlight(messageObject);
 		}
 		
