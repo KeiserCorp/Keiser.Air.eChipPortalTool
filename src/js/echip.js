@@ -209,7 +209,7 @@ module.exports = function () {
 	 *	eChip Parser
 	 */
 	var keyParseData = function () {
-		eChip.keyState.parsedData = eChipParser.parse(eChip.keyState.data)
+		eChip.keyState.parsedData = eChipParser.parse(eChip.keyState.data);
 	};
 
 	/*

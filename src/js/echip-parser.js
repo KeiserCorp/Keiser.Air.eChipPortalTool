@@ -7,8 +7,28 @@ module.exports = function () {
 	 */
 	eCp.parse = function (data) {
 		var eChipObject = {};
-		parseDirectory(data, eChipObject);
+		if (validData(data)) {
+			parseDirectory(data, eChipObject);
+		} else {
+			throw new Error('Invalid Data Structure');
+		}
 		return eChipObject;
+	};
+	
+	var validData = function (data) {
+		var valid = true;
+		data.forEach(function (page) {
+			if (!emptyPage(page)) {
+				var crc = 0;
+				for (var x = 0; x < 32; x++) {
+					crc = crc16(page[x], crc);
+				}
+				if (crc != 0xB001) {
+					valid = false;
+				}
+			}
+		});
+		return valid;
 	};
 
 	var parseDirectory = function (data, eChipObject) {
@@ -65,9 +85,7 @@ module.exports = function () {
 		rep.reps = null;
 	};
 
-	var parseRepNormal = function (dataPage, repObject) {
-		
-	};
+	var parseRepNormal = function (dataPage, repObject) {};
 
 	/*
 	 *	Builder
@@ -126,6 +144,29 @@ module.exports = function () {
 
 	var valueOrNull = function (value) {
 		return (value === 255) ? null : value;
+	};
+
+	var emptyPage = function (page) {
+		var empty = true;
+		page.forEach(function (tuple) {
+			if (tuple != 0x55) {
+				empty = false;
+			}
+		});
+		return empty;
+	};
+
+	var crc16 = function (data, crc) {
+		var value = data;
+		for (var x = 1; x <= 8; x++) {
+			var odd = (value^crc) % 2;
+			crc = crc >> 1;
+			value = value >> 1;
+			if (odd) {
+				crc = crc^0xA001;
+			}
+		}
+		return crc;
 	};
 
 	return eCp;
