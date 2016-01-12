@@ -1,9 +1,13 @@
 module.exports = function () {
 	'use strict';
+	var moment = require('moment');
 	var eCp = {};
 
 	/*
 	 *	Parser
+	 *
+	 *	Machine Parser:	Parses most new machines.  Does not handle Heavy Negative Machines or
+	 *					Special Runners.  Extra Data seat positions are not being included.
 	 */
 	eCp.parse = function (data) {
 		var eChipObject = {};
@@ -14,7 +18,7 @@ module.exports = function () {
 		}
 		return eChipObject;
 	};
-	
+
 	var validData = function (data) {
 		var valid = true;
 		data.forEach(function (page) {
@@ -54,38 +58,132 @@ module.exports = function () {
 	};
 
 	var parseMachineRep = function (data, machineObject, page) {
+		const POWER_TEST = 'Power';
+		const A420_6R_TEST = 'A420 6-Rep';
+		const A420_10R_TEST = 'A420 10-Rep';
+
 		var fatBuffer = (Math.floor(page / 30) * 32) + 31;
 		var fatBufferOffset = (page % 30);
 		var nextPage = data[fatBuffer][fatBufferOffset];
 		var dataPage = data[page];
 
 		var rep = {};
+		rep.model = byteToString(dataPage[7], dataPage[8]);
+		rep.version = byteToLongString(dataPage[12], dataPage[11], dataPage[10], dataPage[9]);
+		rep.serial = byteToSerialString(dataPage[13], dataPage[14], dataPage[15], dataPage[16], dataPage[17], rep.version);
 		rep.time = bytesToTime(dataPage[0], dataPage[1], dataPage[2], dataPage[3]);
 		rep.resistance = byteToWord(dataPage[4], dataPage[5]);
+		rep.units = null;
 		rep.reps = dataPage[6];
-		rep.model = parseInt(byteToString(dataPage[7], dataPage[8]));
-		rep.version = byteToLongString(dataPage[12], dataPage[11], dataPage[10], dataPage[9]);
 
-		if (rep.reps == 254) {
-			parseRepTest(dataPage, rep);
-		} else {
-			parseRepNormal(dataPage, rep);
+		if (unitVersion(rep.version)) {
+			if ((dataPage[17] & 0x80) == 0x80) {
+				rep.resistance = rep.resistance / 10;
+			}
+
+			switch (dataPage[17] & 0x60) {
+			case 0x00:
+				rep.units = 'lb';
+				break;
+			case 0x20:
+				rep.units = 'kg';
+				break;
+			case 0x40:
+				rep.units = 'ne';
+				break;
+			case 0x60:
+				rep.units = 'er';
+				break;
+			}
+		}
+
+		if (testVersion(rep.version)) {
+			if (rep.reps <= 254 && rep.reps >= 252) {
+				rep.test = {};
+				switch (rep.reps) {
+				case 254:
+					rep.test.type = POWER_TEST;
+					rep.test = {
+						low : decodePackData(dataPage, 18),
+						high : decodePackData(dataPage, 24)
+					};
+					break;
+				case 253:
+					rep.test.type = A420_6R_TEST;
+					break;
+				case 252:
+					rep.test.type = A420_10R_TEST;
+					break;
+				}
+				rep.reps = null;
+			} else {
+				if (peakPowerVersion(rep.version)) {
+
+					rep.peak = byteToWord(dataPage[20], dataPage[21]);
+					rep.work = Math.round(byteToLongWord(dataPage[22], dataPage[23], dataPage[24], dataPage[25]) / 64);
+
+					if ((parseInt(rep.model, 16) & 0xFF00) == 0x3200) {
+						rep.distance = byteToWord(dataPage[18], dataPage[19]);
+					}
+				}
+			}
 		}
 
 		if (!machineObject.reps) {
 			machineObject.reps = [];
 		}
 		machineObject.reps.push(rep);
+
 		if (nextPage != 254 && nextPage != 31 && nextPage != 32) {
 			parseMachineRep(data, machineObject, nextPage);
 		}
 	};
 
-	var parseRepTest = function (dataPage, repObject) {
-		rep.reps = null;
+	var decodePackData = function (dataPage, pageOffset) {
+		var testObject = {};
+		testObject.Power = dataPage[pageOffset] + ((dataPage[pageOffset + 2] & 0x1F) << 8);
+		testObject.Velocity = dataPage[pageOffset + 1] + ((dataPage[pageOffset + 2] & 0xE0) << 3) + (((dataPage[pageOffset + 2] & 0x80) >> 7) * 0xF8);
+		testObject.Force = (dataPage[pageOffset + 3] + ((dataPage[pageOffset + 5] & 0xF0) << 4)) << 4;
+		testObject.Position = dataPage[pageOffset + 4] + ((dataPage[pageOffset + 5] & 0x0F) << 8);
+		return testObject;
 	};
 
-	var parseRepNormal = function (dataPage, repObject) {};
+	/*
+	 *	Version Tests
+	 */
+	/* 	var heavyNegativeVersion = function (version) {
+	var versionValue = parseInt(version, 16);
+	return (versionValue > 0x3D81A828) ||
+	(versionValue == 0x3CFD7AEF) ||
+	(versionValue == 0x3D047497) ||
+	(versionValue == 0x3D276E40) ||
+	(versionValue == 0x3D3E72CE);
+	}; */
+
+	var testVersion = function (version) {
+		var versionValue = parseInt(version, 16);
+		return (versionValue > 0x2F6579F0);
+	};
+
+	var peakPowerVersion = function (version) {
+		var versionValue = parseInt(version, 16);
+		return (versionValue > 0x32BA5C89);
+	};
+
+	/* 	var seatPositionVersion = function (version) {
+	var versionValue = parseInt(version, 16);
+	return (versionValue > 0x3B555162);
+	}; */
+
+	/* 	var timeZoneVersion = function (version) {
+	var versionValue = parseInt(version, 16);
+	return (versionValue > 0x2B9D6AF9);
+	}; */
+
+	var unitVersion = function (version) {
+		var versionValue = parseInt(version, 16);
+		return (versionValue > 0x318E4F00);
+	};
 
 	/*
 	 *	Builder
@@ -140,6 +238,18 @@ module.exports = function () {
 
 	var bytesToTime = function (lsb, byte2, byte3, msb) {
 		return new Date(byteToLongWord(lsb, byte2, byte3, msb) * 1000);
+	};
+
+	var byteToSerialString = function (lsb, byte2, byte3, msb, channel, version) {
+		var time = bytesToTime(lsb, byte2, byte3, msb);
+		var serial = moment(time).utc().format('MMDD YYYY HHmm ss');
+		if (unitVersion(version)) {
+			serial += ('00' + ((channel & 0x1F) + 0x20).toString()).substr(-2);
+		} else {
+			serial += ((channel & 0xF0) / 0x10).toString(16);
+			serial += (channel & 0x1f).toString(16);
+		}
+		return serial;
 	};
 
 	var valueOrNull = function (value) {

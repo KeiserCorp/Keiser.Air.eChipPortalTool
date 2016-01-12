@@ -28,5 +28,8 @@
     "uikit": "^2.24.3",
     "vinyl-source-stream": "^1.1.0",
     "vue": "1.0.11-csp"
+  },
+  "dependencies": {
+    "moment": "^2.11.1"
   }
 }
