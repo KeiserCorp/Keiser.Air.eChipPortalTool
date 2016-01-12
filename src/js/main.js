@@ -301,7 +301,8 @@ const ACTIONS = {
 			el : '#echip-modal',
 			data : {
 				'eChipKeyState' : eChip.keyState,
-				'eChipStatus' : eChip.status
+				'eChipStatus' : eChip.status,
+				'modalDataDisplay' : 1
 			},
 			computed : {
 				keyID : function () {
@@ -311,16 +312,12 @@ const ACTIONS = {
 				},
 				keyData : function () {
 					if (this.eChipKeyState.data) {
-						var output = '';
-						var page = 0;
-						this.eChipKeyState.data.forEach(function (row) {
-							output += '[' + ('000' + (page++)).substr(-3) + '] ';
-							row.forEach(function (column) {
-								output += ('00' + column.toString(16)).substr(-2).toUpperCase();
-							});
-							output += '\n';
-						});
-						return output;
+						return eChipModalDataHighlight(this.eChipKeyState.data);
+					}
+				},
+				keyParsedData : function () {
+					if (this.eChipKeyState.parsedData) {
+						return eChipModalSyntaxHighlight(this.eChipKeyState.parsedData);
 					}
 				}
 			},
@@ -330,6 +327,39 @@ const ACTIONS = {
 				}
 			}
 		});
+
+	var eChipModalDataHighlight = function (data) {
+		var output = '';
+		var page = 0;
+		data.forEach(function (row) {
+			output += '[<span class="key">' + ('000' + (page++)).substr(-3) + '</span>] <span class="string">';
+			row.forEach(function (column) {
+				output += ('00' + column.toString(16)).substr(-2).toUpperCase();
+			});
+			output += '</span>\n';
+		});
+		return output;
+	};
+
+	var eChipModalSyntaxHighlight = function (parsedData) {
+		var json = JSON.stringify(parsedData, undefined, 2);
+		json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+		return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+			var cls = 'number';
+			if (/^"/.test(match)) {
+				if (/:$/.test(match)) {
+					cls = 'key';
+				} else {
+					cls = 'string';
+				}
+			} else if (/true|false/.test(match)) {
+				cls = 'boolean';
+			} else if (/null/.test(match)) {
+				cls = 'null';
+			}
+			return '<span class="' + cls + '">' + match + '</span>';
+		});
+	};
 
 	/*
 	 *	eChip to Web Portal Actions

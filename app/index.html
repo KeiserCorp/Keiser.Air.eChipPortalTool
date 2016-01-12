@@ -67,7 +67,24 @@
 			</template>
 			<template v-if="!eChipStatus.keyConnected">Disconnected</template>
 			</p>
-			<div class="uk-overflow-container"><pre>{{ keyData }}</pre></div>
+		
+			<div>
+				<ul class="uk-tab">
+					<li v-bind:class="{ 'uk-active': modalDataDisplay == 1 }"><a href="#" v-on:click="modalDataDisplay = 1">Machine Data</a></li>
+					<li  v-bind:class="{ 'uk-active': modalDataDisplay == 2 }"><a href="#" v-on:click="modalDataDisplay = 2">Raw Key Data</a></li>
+				</ul>
+				<div class="uk-overflow-container">
+					<ul id="modal-data-tabs" class="uk-switcher">
+						<li v-bind:class="{ 'uk-active': modalDataDisplay == 1 }">
+							<pre class="syntax-highlight">{{{ keyParsedData }}}</pre>
+						</li>
+						<li v-bind:class="{ 'uk-active': modalDataDisplay == 2 }">
+							<pre class="syntax-highlight">{{{ keyData }}}</pre>
+						</li>
+					</ul>
+				</div>
+			</div>
+			
 		</div>
 	</div>
 	
