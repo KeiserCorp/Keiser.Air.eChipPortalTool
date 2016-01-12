@@ -151,14 +151,6 @@ module.exports = function () {
 	/*
 	 *	Version Tests
 	 */
-	/* 	var heavyNegativeVersion = function (version) {
-	var versionValue = parseInt(version, 16);
-	return (versionValue > 0x3D81A828) ||
-	(versionValue == 0x3CFD7AEF) ||
-	(versionValue == 0x3D047497) ||
-	(versionValue == 0x3D276E40) ||
-	(versionValue == 0x3D3E72CE);
-	}; */
 
 	var testVersion = function (version) {
 		var versionValue = parseInt(version, 16);
@@ -169,16 +161,6 @@ module.exports = function () {
 		var versionValue = parseInt(version, 16);
 		return (versionValue > 0x32BA5C89);
 	};
-
-	/* 	var seatPositionVersion = function (version) {
-	var versionValue = parseInt(version, 16);
-	return (versionValue > 0x3B555162);
-	}; */
-
-	/* 	var timeZoneVersion = function (version) {
-	var versionValue = parseInt(version, 16);
-	return (versionValue > 0x2B9D6AF9);
-	}; */
 
 	var unitVersion = function (version) {
 		var versionValue = parseInt(version, 16);
