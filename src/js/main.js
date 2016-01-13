@@ -17,7 +17,6 @@ const ACTIONS = {
 	 */
 	var windowInitialize = function () {
 		settingsLoad();
-		webPortalInitialize();
 		eChip.initialize();
 	};
 
@@ -174,6 +173,7 @@ const ACTIONS = {
 		chrome.storage.local.get('settings', function (savedSettings) {
 			$.extend(settings, savedSettings);
 		});
+		webPortalInitialize();
 	};
 
 	var settingsSave = function () {
