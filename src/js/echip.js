@@ -125,6 +125,9 @@ module.exports = function () {
 		km.hasNext = function () {
 			return commands.length > 0;
 		};
+		km.clear = function (){
+			commands = [];
+		};
 		return km;
 	}
 	();
@@ -151,6 +154,7 @@ module.exports = function () {
 			if (rom[0] === 0x0C) {
 				eChip.keyState.rom = rom;
 				eChip.status.keyConnected = true;
+				keyMonitorQueue.clear();
 				eChip.keyRefresh();
 				keyMonitor();
 			} else {
@@ -179,6 +183,27 @@ module.exports = function () {
 				return ow.deviceReset()
 				.then(function () {
 					return keyGetData(true);
+				});
+			}
+		});
+	};
+
+	var keyWriteData = function (data, retry) {
+		eChip.status.keyAction = 'set';
+		keyStateDataClear();
+		return ow.keyWriteDiff(eChip.keyState.rom, data, eChip.keyState.data, true)
+		.then(function () {
+			eChip.status.keyAction = '';
+			return keyGetData();
+		})
+		.fail(function (error) {
+			if (retry) {
+				console.log('Memory Write Error: ' + error.message + ' [Cancelled]');
+			} else {
+				console.log('Memory Write Error: ' + error.message + ' [Retrying]');
+				return ow.deviceReset()
+				.then(function () {
+					return keyWriteData(data, true);
 				});
 			}
 		});
@@ -233,6 +258,13 @@ module.exports = function () {
 		} else {
 			callback(eChip.keyState);
 		}
+	};
+
+	eChip.keyWrite = function (dataObject) {
+		var data = eChipParser.build(dataObject);
+		keyMonitorQueue.add(function () {
+			return keyWriteData(data);
+		});
 	};
 
 	eChip.keyClear = function () {

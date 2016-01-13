@@ -221,6 +221,9 @@ const ACTIONS = {
 				keyUpload : function () {
 					webPortalSendEChip();
 				},
+				keyDownload : function () {
+					webPortalGetEChip();
+				},
 				keyClear : function () {
 					eChip.keyClear();
 				}
@@ -379,6 +382,16 @@ const ACTIONS = {
 			if (settings.eraseOnUpload) {
 				eChip.keyClear();
 			}
+		}
+	};
+
+	var webPortalGetEChip = function () {
+		webPortalMessageSendRequest(ACTIONS.ECHIP_GET, {}, webPortalGetEChipResponse);
+	};
+
+	var webPortalGetEChipResponse = function (messageObject) {
+		if ((messageObject || {}).data) {
+			eChip.keyWrite(messageObject.data);
 		}
 	};
 

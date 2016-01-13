@@ -1,5 +1,6 @@
 (function () {
 	var keu = require('keiser-echip-utilities');
+	var testData = require('./test-data.js');
 	var output = document.getElementById("output");
 	var appWindow;
 	var appOrigin;
@@ -15,7 +16,7 @@
 				type : 'response',
 				action : 'connect',
 				data : {
-					actions : ['echip-set']
+					actions : ['echip-set', 'echip-get']
 				}
 			};
 			sendMessage(responseMessageObject);
@@ -33,7 +34,17 @@
 			sendMessage(responseMessageObject);
 		}
 
-		addMachineNames(messageObject);
+		if (messageObject.type == 'request' && messageObject.action == 'echip-get') {
+			var responseMessageObject = {
+				id : messageObject.id,
+				type : 'response',
+				action : 'echip-get',
+				data : testData.test1
+			};
+			sendMessage(responseMessageObject);
+		}
+
+		/* addMachineNames(messageObject); */
 		output.innerHTML = syntaxHighlight(messageObject);
 	}
 
@@ -46,7 +57,7 @@
 	function addMachineNames(messageObject) {
 		if (messageObject.action == 'echip-set') {
 			console.log(messageObject.data.machines);
-			Object.keys(messageObject.data.machines).forEach(function (model) {  
+			Object.keys(messageObject.data.machines).forEach(function (model) {
 				messageObject.data.machines[model].name = keu.machines.getMachine(parseInt(model, 16)).name;
 			});
 		}
