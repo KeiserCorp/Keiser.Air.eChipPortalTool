@@ -1,7 +1,7 @@
 module.exports = function () {
 	'use strict';
 	var $ = require('jquery');
-	var ow = require('1-wire-js');
+	var ow = window.ow;
 	var eChipParser = require('./echip-parser.js');
 	var eChip = {};
 

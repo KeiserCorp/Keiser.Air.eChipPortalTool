@@ -16,6 +16,7 @@ var appDir = './app/';
 var externalTestDir = './external-test/';
 
 var mainScript = jsSrcDir + 'main.js';
+var backgroundScript = jsSrcDir + 'background.js';
 var mainStyle = lessSrcDir + 'main.less';
 var fontFiles = [
 	'./node_modules/uikit/dist/fonts/*.*'
@@ -35,6 +36,17 @@ gulp.task('js-bundle', function () {
 	.pipe(rename({
 			dirname : '/',
 			basename : 'bundle'
+		}))
+	.pipe(gulp.dest(appDir));
+});
+
+gulp.task('background-bundle', function () {
+	browserify(backgroundScript).bundle()
+	.pipe(source(backgroundScript))
+	.pipe(production ? streamify(uglify()) : util.noop())
+	.pipe(rename({
+			dirname : '/',
+			basename : 'background'
 		}))
 	.pipe(gulp.dest(appDir));
 });
@@ -71,11 +83,12 @@ gulp.task('external-bundle', function () {
 });
 
 gulp.task('default', function () {
-	gulp.start('js-bundle', 'css-bundle', 'move-fonts', 'external-bundle');
+	gulp.start('js-bundle', 'background-bundle', 'css-bundle', 'move-fonts', 'external-bundle');
 });
 
 gulp.task('watch', function () {
-	gulp.watch(jsSrcDir + '**/*.js', ['js-bundle']);
+	gulp.watch([jsSrcDir + '**/*.js', '!' + jsSrcDir + 'background.js'], ['js-bundle']);
+	gulp.watch(jsSrcDir + 'background.js', ['background-bundle']);
 	gulp.watch(lessSrcDir + '**/*.less', ['css-bundle']);
 	gulp.watch(externalTestDir + 'src/**/*.js', ['external-bundle']);
 });
