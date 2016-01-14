@@ -35,10 +35,8 @@ html, body {
 	margin: 0;
 	padding: 0;
 	border-radius: 0;
-	.uk-navbar-nav > li:first-child{
-		a {
-			min-width: ~"calc(100% + 10px)";
-		}
+	.echip-status-tab {
+		min-width: 7em;
 	}
 }
 
@@ -50,6 +48,17 @@ pre.syntax-highlight{
 	.boolean { color: #D0F979; }
 	.null { color: #F9F979; }
 	.key { color: #80EF50; }
+}
+
+ul.uk-tab  + div.uk-overflow-container {
+	border: 1px solid #DDDDDD;
+	border-top: 0px;
+	border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px;
+	padding: 2px;
+	pre {
+		margin: 0px;
+	}
 }
 
 @font-face {

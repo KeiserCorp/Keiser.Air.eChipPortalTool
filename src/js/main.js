@@ -172,7 +172,7 @@ const ACTIONS = {
 
 	var settingsLoad = function () {
 		chrome.storage.local.get('settings', function (savedSettings) {
-			$.extend(settings, savedSettings);
+			$.extend(settings, savedSettings.settings);
 		});
 		webPortalInitialize();
 	};

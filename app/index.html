@@ -13,10 +13,15 @@
 	<div id="settings-modal" class="uk-modal">
 		<div class="uk-modal-dialog">
 			<div class="uk-modal-header">
-				<h1>Settings</h1>
+				<h1>Settings
+					<a href="#help-modal" class="uk-float-right uk-navbar-nav-subtitle" data-uk-modal="{center:true}">
+						<i class="uk-icon-question-circle"></i>
+						<div class="uk-text-center">Help</div>
+					</a>
+				</h1>
 			</div>
 				<form class="uk-form uk-form-stacked" v-on:submit.prevent>
-					<a href="#default" class="uk-float-right" v-on:click="setDefault()">Default</a>
+					<a href="#default" class="uk-float-right" v-on:click="setDefault()">Set Defaults</a>
 					<div class="uk-form-row">
 						<div class="uk-form-controls">
 						</div>
@@ -37,6 +42,16 @@
 				<button class="uk-button uk-modal-close">Cancel</button>
 				<button class="uk-button uk-button-primary uk-float-right uk-modal-close" v-on:click="save()" :disabled="!settingsValid">Save</button>
 			</div>
+		</div>
+	</div>
+	
+	<div id="help-modal" class="uk-modal">
+		<div class="uk-modal-dialog">
+			<a class="uk-modal-close uk-close"></a>
+			<div class="uk-modal-header">
+				<h1>Help</h1>
+			</div>
+				HELP!
 		</div>
 	</div>
 	
@@ -101,12 +116,11 @@
 		</ul>
 		<ul class="uk-navbar-nav" v-show="eChipStatus.keyConnected">
 			<li>
-				<a href="#echip-modal" class="uk-navbar-nav-subtitle" data-uk-modal="{center:true}">
+				<a href="#echip-modal" class="echip-status-tab uk-navbar-nav-subtitle" data-uk-modal="{center:true}">
 					eChip 
-					<template v-if="eChipStatus.keyAction"><i class="uk-icon-spinner uk-icon-spin"></i> </template>
-<!-- 					<template v-if="eChipStatus.keyAction == ''"><i class="uk-icon-spacer"></i></template>	 -->				
-					<template v-if="!eChipStatus.keyAction && eChipKeyState.empty"><div class="uk-badge uk-badge-notification uk-badge-warning">E</div></template>
-					<template v-if="!eChipStatus.keyAction && !eChipKeyState.empty"><div class="uk-badge uk-badge-notification uk-badge-success">D</div></template>
+					<template v-if="eChipStatus.keyAction"><i class="uk-icon-spinner uk-icon-spin"></i> </template>	
+					<template v-if="!eChipStatus.keyAction && eChipKeyState.read && eChipKeyState.empty"><div class="uk-badge uk-badge-notification uk-badge-warning">E</div></template>
+					<template v-if="!eChipStatus.keyAction & eChipKeyState.read && !eChipKeyState.empty"><div class="uk-badge uk-badge-notification uk-badge-success">D</div></template>
 					<div>
 					<template v-if="eChipStatus.keyAction == ''">Connected</template>
 					<template v-if="eChipStatus.keyAction == 'get'">Reading</template>
