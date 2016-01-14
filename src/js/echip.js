@@ -12,7 +12,8 @@ module.exports = function () {
 		permissionGranted : false,
 		deviceConnected : false,
 		keyConnected : false,
-		keyAction : ''
+		keyAction : '',
+		error : ''
 	};
 
 	/*
@@ -56,6 +57,7 @@ module.exports = function () {
 		eChip.status.deviceConnected = false;
 		eChip.status.keyConnected = false;
 		eChip.status.keyAction = '';
+		eChip.status.error = '';
 		keyStateClear();
 	};
 
@@ -70,7 +72,9 @@ module.exports = function () {
 	const keyStateDefault = {
 		rom : null,
 		data : null,
-		parsedData : null
+		parsedData : null,
+		read : false,
+		empty : true
 	};
 
 	eChip.keyState = $.extend({}, keyStateDefault);
@@ -82,7 +86,9 @@ module.exports = function () {
 	var keyStateDataClear = function () {
 		$.extend(eChip.keyState, {
 			data : null,
-			parsedData : null
+			parsedData : null,
+			read : false,
+			empty : true
 		});
 	};
 
@@ -99,6 +105,7 @@ module.exports = function () {
 			} else {
 				eChip.status.keyConnected = false;
 				eChip.status.keyAction = '';
+				eChip.status.error = '';
 				keyStateClear();
 				keyAwait();
 			}
@@ -118,14 +125,16 @@ module.exports = function () {
 		km.runNext = function (nextCommand) {
 			var fn = commands.shift();
 			if (fn) {
-				return fn.call().then(nextCommand);
+				return fn.call().then(nextCommand).fail(function (e) {
+					console.log(e);
+				});
 			}
 			return nextCommand.call();
 		};
 		km.hasNext = function () {
 			return commands.length > 0;
 		};
-		km.clear = function (){
+		km.clear = function () {
 			commands = [];
 		};
 		return km;
@@ -172,12 +181,16 @@ module.exports = function () {
 		return ow.keyReadAll(eChip.keyState.rom, true)
 		.then(function (data) {
 			eChip.keyState.data = data;
+			eChip.keyState.read = true;
 			eChip.status.keyAction = '';
+			eChip.status.error = '';
 			keyParseData();
+			eChip.keyState.empty = (Object.keys(eChip.keyState.parsedData).length == 0);
 			return eChip.keyState;
 		}).fail(function (error) {
 			if (retry) {
 				console.log('Memory Read Error: ' + error.message + ' [Cancelled]');
+				eChip.status.error = 'Memory Read Error';
 			} else {
 				console.log('Memory Read Error: ' + error.message + ' [Retrying]');
 				return ow.deviceReset()
@@ -194,11 +207,13 @@ module.exports = function () {
 		return ow.keyWriteDiff(eChip.keyState.rom, data, eChip.keyState.data, true)
 		.then(function () {
 			eChip.status.keyAction = '';
+			eChip.status.error = '';
 			return keyGetData();
 		})
 		.fail(function (error) {
 			if (retry) {
 				console.log('Memory Write Error: ' + error.message + ' [Cancelled]');
+				eChip.status.error = 'Memory Write Error';
 			} else {
 				console.log('Memory Write Error: ' + error.message + ' [Retrying]');
 				return ow.deviceReset()
@@ -215,11 +230,13 @@ module.exports = function () {
 		return ow.keyWriteDiff(eChip.keyState.rom, eChipParser.buildEmpty(), eChip.keyState.data, true)
 		.then(function () {
 			eChip.status.keyAction = '';
+			eChip.status.error = '';
 			return keyGetData();
 		})
 		.fail(function (error) {
 			if (retry) {
 				console.log('Memory Clear Error: ' + error.message + ' [Cancelled]');
+				eChip.status.error = 'Memory Clear Error';
 			} else {
 				console.log('Memory Clear Error: ' + error.message + ' [Retrying]');
 				return ow.deviceReset()

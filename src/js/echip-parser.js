@@ -207,20 +207,20 @@ module.exports = function () {
 				attributes.reps.forEach(function (rep, index) {
 					var recordPage = (Math.floor(recordIndex / 30) * 32) + (recordIndex % 30);
 					buildMachineRep(rep, attributes.position, data[recordPage]);
-					
+
 					var fatPage = (Math.floor(recordIndex / 30) * 32) + 31;
 					var fatPageOffset = recordIndex % 30;
 					data[fatPage][fatPageOffset] = (index + 1 < attributes.reps.length) ? recordIndex + 1 : 0xFE;
-					
+
 					recordIndex++;
 				});
 
 				directoryIndex++;
 			}
 		});
-		
+
 		buildCRC(data);
-		
+
 		return data;
 	};
 
@@ -271,8 +271,10 @@ module.exports = function () {
 		if (peakPowerVersion(rep.version)) {
 			var peak = wordToByte(rep.peak);
 			var work = longWordToByte(rep.work * 64);
+			var seat = (position.seat == null) ? 0xFF : position.seat;
 			var rom1 = (position.rom1 == null) ? 0xFF : position.rom1;
 			var rom2 = (position.rom2 == null) ? 0xFF : position.rom2;
+			var chest = (position.chest == null) ? 0xFF : position.chest;
 
 			if ((parseInt(rep.model, 16) & 0xFF00) == 0x3200) {
 				var distance = wordToByte(rep.distance);
@@ -289,13 +291,13 @@ module.exports = function () {
 			page[23] = work[2];
 			page[24] = work[1];
 			page[25] = work[0];
-			page[26] = 0xFF;
-			page[27] = 0xFF;
+			page[26] = seat;
+			page[27] = rom2;
 			page[28] = rom1;
-			page[29] = rom2;
+			page[29] = chest;
 		}
 	};
-	
+
 	var buildCRC = function (data) {
 		data.forEach(function (page) {
 			if (!emptyPage(page)) {
@@ -303,7 +305,7 @@ module.exports = function () {
 				for (var x = 0; x < 30; x++) {
 					crc = crc16(page[x], crc);
 				}
-				var crcValue = wordToByte(crc ^ 0xFFFF);
+				var crcValue = wordToByte(crc^0xFFFF);
 				page[30] = crcValue[1];
 				page[31] = crcValue[0];
 			}

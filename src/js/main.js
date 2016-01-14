@@ -1,6 +1,7 @@
 'use strict';
 var $ = window.jQuery = require('jquery');
 var UIkit = require('uikit');
+UIkit = window.UIkit;
 var Vue = require('vue');
 var eChip = require('./echip.js');
 
@@ -200,6 +201,7 @@ const ACTIONS = {
 	var toolBarVue = new Vue({
 			el : '#tool-bar',
 			data : {
+				'eChipKeyState' : eChip.keyState,
 				'eChipStatus' : eChip.status,
 				'webPortalState' : webPortalState
 			},
