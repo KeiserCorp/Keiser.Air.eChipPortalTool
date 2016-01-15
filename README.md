@@ -14,3 +14,7 @@ Chrome web portal which allows communication with the Keiser eChip system using 
 
 ## Contributors
 * [bayssmekanique](https://github.com/bayssmekanique)
+
+## Copyright and License
+
+Copyright [Keiser Corporation](http://keiser.com/) under the [MIT license](LICENSE.md).
