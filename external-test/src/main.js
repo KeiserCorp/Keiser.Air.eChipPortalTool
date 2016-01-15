@@ -1,67 +1,15 @@
 (function () {
 	var keu = require('keiser-echip-utilities');
+	/* 	var keu = require('D:/Development/Keiser/Keiser.Air/Keiser.Air.eChipUtilities/'); */
 	var testData = require('./test-data.js');
 	var output = document.getElementById("output");
-	var appWindow;
-	var appOrigin;
 
-	function onMessage(messageEvent) {
-		appWindow = messageEvent.source;
-		appOrigin = messageEvent.origin;
-		var messageObject = JSON.parse(messageEvent.data);
-
-		if (messageObject.type == 'request' && messageObject.action == 'connect') {
-			var responseMessageObject = {
-				id : messageObject.id,
-				type : 'response',
-				action : 'connect',
-				data : {
-					actions : ['echip-set', 'echip-get']
-				}
-			};
-			sendMessage(responseMessageObject);
-		}
-
-		if (messageObject.type == 'request' && messageObject.action == 'echip-set') {
-			var responseMessageObject = {
-				id : messageObject.id,
-				type : 'response',
-				action : 'echip-set',
-				data : {
-					success : true
-				}
-			};
-			sendMessage(responseMessageObject);
-		}
-
-		if (messageObject.type == 'request' && messageObject.action == 'echip-get') {
-			var responseMessageObject = {
-				id : messageObject.id,
-				type : 'response',
-				action : 'echip-get',
-				data : testData.test1
-			};
-			sendMessage(responseMessageObject);
-		}
-
-		/* addMachineNames(messageObject); */
-		output.innerHTML = syntaxHighlight(messageObject);
-	}
-
-	function sendMessage(messageObject) {
-		if (appWindow && appOrigin) {
-			appWindow.postMessage(JSON.stringify(messageObject), appOrigin)
-		}
-	}
-
-	function addMachineNames(messageObject) {
-		if (messageObject.action == 'echip-set') {
-			console.log(messageObject.data.machines);
-			Object.keys(messageObject.data.machines).forEach(function (model) {
-				messageObject.data.machines[model].name = keu.machines.getMachine(parseInt(model, 16)).name;
-			});
-		}
-	}
+	keu.messenger.enable(function () {
+		return testData.test1;
+	}, function (data, success) {
+		output.innerHTML = syntaxHighlight(data);
+		success();
+	});
 
 	function syntaxHighlight(json) {
 		if (typeof json != 'string') {
@@ -84,6 +32,4 @@
 			return '<span class="' + cls + '">' + match + '</span>';
 		});
 	}
-
-	window.addEventListener('message', onMessage);
 })();
