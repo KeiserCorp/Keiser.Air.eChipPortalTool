@@ -127,8 +127,8 @@ module.exports = function () {
 			} else {
 				if (peakPowerVersion(rep.version)) {
 					rep.peak = byteToWord(dataPage[20], dataPage[21]);
-					//rep.work = Math.round(byteToLongWord(dataPage[22], dataPage[23], dataPage[24], dataPage[25]) / 64);
-					rep.work = byteToLongWord(dataPage[22], dataPage[23], dataPage[24], dataPage[25]) / 64;
+					rep.work = Math.round(byteToLongWord(dataPage[22], dataPage[23], dataPage[24], dataPage[25]) / 64);
+					//rep.work = byteToLongWord(dataPage[22], dataPage[23], dataPage[24], dataPage[25]) / 64;
 
 					if ((parseInt(rep.model, 16) & 0xFF00) == 0x3200) {
 						rep.distance = byteToWord(dataPage[18], dataPage[19]);
