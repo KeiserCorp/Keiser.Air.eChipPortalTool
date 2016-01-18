@@ -2,17 +2,21 @@
 	"name": "keiser-echip-portal-tool",
 	"version": "0.2.0",
 	"description": "Keiser eChip Portal Tool",
+	"author": "Zachary Cardoza",
+	"license": "MIT",
+	"private": true,
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/KeiserCorp/eChip-Portal-Tool.git"
 	},
-	"author": "Zachary Cardoza",
-	"license": "UNLICENSED",
-	"private": true,
 	"bugs": {
 		"url": "https://github.com/KeiserCorp/eChip-Portal-Tool/issues"
 	},
 	"homepage": "https://github.com/KeiserCorp/eChip-Portal-Tool#readme",
+	"scripts": {
+		"build": "gulp",
+		"watch": "gulp watch"
+	},
 	"devDependencies": {
 		"1-wire-js": "^1.0.0",
 		"browserify": "^12.0.1",

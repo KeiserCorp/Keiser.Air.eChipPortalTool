@@ -23,7 +23,7 @@ module.exports = function () {
 		ow.checkPermission()
 			.then(gotPermission);
 		ow.onDeviceAdded.addListener(deviceConnected);
-		ow.onDeviceRemoved.addListener(deviceRemoved)
+		ow.onDeviceRemoved.addListener(deviceRemoved);
 	};
 
 	/*
