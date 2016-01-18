@@ -1,34 +1,34 @@
 {
-  "name": "keiser-echip-portal-tool",
-  "version": "0.2.0",
-  "description": "Keiser eChip Portal Tool",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/KeiserCorp/eChip-Portal-Tool.git"
-  },
-  "author": "Zachary Cardoza",
-  "license": "UNLICENSED",
-  "private": true,
-  "bugs": {
-    "url": "https://github.com/KeiserCorp/eChip-Portal-Tool/issues"
-  },
-  "homepage": "https://github.com/KeiserCorp/eChip-Portal-Tool#readme",
-  "devDependencies": {
-    "1-wire-js": "^1.0.0",
-    "browserify": "^12.0.1",
-    "gulp": "^3.9.0",
-    "gulp-less": "^3.0.5",
-    "gulp-minify-css": "^1.2.2",
-    "gulp-rename": "^1.2.2",
-    "gulp-streamify": "^1.0.2",
-    "gulp-uglify": "^1.5.1",
-    "gulp-util": "^3.0.7",
-    "gulp-watch": "^4.3.5",
-    "jquery": "^2.1.4",
-    "keiser-echip-utilities": "*",
-    "uikit": "^2.24.3",
-    "vinyl-source-stream": "^1.1.0",
-    "vue": "1.0.11-csp",
-	"moment": "^2.11.1"
-  }
+	"name": "keiser-echip-portal-tool",
+	"version": "0.2.0",
+	"description": "Keiser eChip Portal Tool",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/KeiserCorp/eChip-Portal-Tool.git"
+	},
+	"author": "Zachary Cardoza",
+	"license": "UNLICENSED",
+	"private": true,
+	"bugs": {
+		"url": "https://github.com/KeiserCorp/eChip-Portal-Tool/issues"
+	},
+	"homepage": "https://github.com/KeiserCorp/eChip-Portal-Tool#readme",
+	"devDependencies": {
+		"1-wire-js": "^1.0.0",
+		"browserify": "^12.0.1",
+		"gulp": "^3.9.0",
+		"gulp-less": "^3.0.5",
+		"gulp-minify-css": "^1.2.2",
+		"gulp-rename": "^1.2.2",
+		"gulp-streamify": "^1.0.2",
+		"gulp-uglify": "^1.5.1",
+		"gulp-util": "^3.0.7",
+		"gulp-watch": "^4.3.5",
+		"jquery": "^2.1.4",
+		"keiser-echip-utilities": "*",
+		"uikit": "^2.24.3",
+		"vinyl-source-stream": "^1.1.0",
+		"vue": "1.0.11-csp",
+		"moment": "^2.11.1"
+	}
 }

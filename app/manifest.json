@@ -1,31 +1,31 @@
 {
-  "manifest_version": 2,
-  "name": "Keiser eChip Portal Tool",
-  "short_name": "eChip Portal",
-  "description": "Chrome web portal which allows communication with the Keiser eChip system using the 1-Wire® communication protocol.",
-  "version": "0.2.1",
-  "minimum_chrome_version": "42",
+	"manifest_version": 2,
+	"name": "Keiser eChip Portal Tool",
+	"short_name": "eChip Portal",
+	"description": "Chrome web portal which allows communication with the Keiser eChip system using the 1-Wire® communication protocol.",
+	"version": "0.2.1",
+	"minimum_chrome_version": "42",
 
-  "icons": {
-    "16": "icon/icon_16.png",
-    "128": "icon/icon_128.png"
-  },
+	"icons": {
+		"16": "icon/icon_16.png",
+		"128": "icon/icon_128.png"
+	},
 
-  "app": {
-    "background": {
-      "scripts": ["background.js"]
-    }
-  },
-  
-  "permissions": [
-    "usb",
-	"webview",
-	"storage"
-    ],
-  "optional_permissions": [
-    {"usbDevices": [
-      {"vendorId": 1274, "productId": 9360}
-      ]
-    }
-  ]
+	"app": {
+		"background": {
+			"scripts": ["background.js"]
+		}
+	},
+
+	"permissions": [
+		"usb",
+		"webview",
+		"storage"
+	],
+	"optional_permissions": [{
+		"usbDevices": [{
+			"vendorId": 1274,
+			"productId": 9360
+		}]
+	}]
 }

@@ -2,91 +2,116 @@
 // ========================================================================
 
 @import "uikit.less";
-
 // Local Styles
 // ========================================================================
 
-html, body { 
-	margin:0; 
-	padding:0; 
-	height:100%; 
-	// Over-ride style injected by Chrome (Issue 469452)
-	font: normal 14px / 20px "Helvetica Neue", Helvetica, Arial, sans-serif;
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  // Over-ride style injected by Chrome (Issue 469452)
+  font: normal 14px / 20px "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
 
 #web-portal-wrapper {
-	width: 100%;
-	margin: 0;
-	padding: 0;
-	height: ~"calc(100% - 43px)";
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  height: ~"calc(100% - 43px)";
 }
 
-#web-portal{
-	width: 100%;
-	margin: 0;
-	padding: 0;
-	height: ~"calc(100% - 1px)";
-	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+#web-portal {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  height: ~"calc(100% - 1px)";
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-#tool-bar{
-	width: 100%;
-	height:41px;
-	margin: 0;
-	padding: 0;
-	border-radius: 0;
-	.echip-status-tab {
-		min-width: 7em;
-	}
+
+#tool-bar {
+  width: 100%;
+  height: 41px;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+
+  .echip-status-tab {
+    min-width: 7em;
+  }
 }
 
-pre.syntax-highlight{
-	color: #DADADA;
-	background-color: #222222;
-	.string { color: #80CEFF; }
-	.number { color: #FO8689; }
-	.boolean { color: #D0F979; }
-	.null { color: #F9F979; }
-	.key { color: #80EF50; }
+
+pre.syntax-highlight {
+  color: #DADADA;
+  background-color: #222222;
+
+  .string {
+    color: #80CEFF;
+  }
+
+  .number {
+    color: #FO8689;
+  }
+
+  .boolean {
+    color: #D0F979;
+  }
+
+  .null {
+    color: #F9F979;
+  }
+
+  .key {
+    color: #80EF50;
+  }
 }
 
-ul.uk-tab  + div.uk-overflow-container {
-	border: 1px solid #DDDDDD;
-	border-top: 0px;
-	border-bottom-right-radius: 3px;
-	border-bottom-left-radius: 3px;
-	padding: 2px;
-	pre {
-		margin: 0px;
-	}
+
+ul.uk-tab + div.uk-overflow-container {
+  border: 1px solid #DDDDDD;
+  border-top: 0;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  padding: 2px;
+
+  pre {
+    margin: 0;
+  }
 }
+
 
 @font-face {
-    font-family: 'Keiser';
-    src: url("/fonts/keiser-webfont.eot");
-    src: url("/fonts/keiser-webfont.eot") format("embedded-opentype"), url("/fonts/keiser-webfont.woff") format("woff"), url("/fonts/keiser-webfont.ttf") format("truetype");
-    font-weight: normal;
-    font-style: normal;
+  font-family: "Keiser";
+  src: url("/fonts/keiser-webfont.eot");
+  src: url("/fonts/keiser-webfont.eot") format("embedded-opentype"), url("/fonts/keiser-webfont.woff") format("woff"), url("/fonts/keiser-webfont.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
 }
+
 
 .keiser-font {
-    font-family: 'Keiser';
-    color: @keiser-red;
-	font-size: 120%;
-    line-height: 2;
+  font-family: "Keiser";
+  color: @keiser-red;
+  font-size: 120%;
+  line-height: 2;
 }
 
+
 .keiser-k-padding {
-    letter-spacing: -0.1em;
+  letter-spacing: -0.1em;
 }
 
 // UIKit Style Fixes
 // ========================================================================
 .uk-navbar-content {
-	line-height: 40px;
+  line-height: 40px;
 }
 
-.uk-icon-spacer::before{
-	width: 3em;
-	content: '\A0\A0\A0\A0';
+.uk-icon-spacer::before {
+  width: 3em;
+  content: "\A0\A0\A0\A0";
 }

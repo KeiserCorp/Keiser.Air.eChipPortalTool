@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -20,41 +21,41 @@
 					</a>
 				</h1>
 			</div>
-				<form class="uk-form uk-form-stacked" v-on:submit.prevent>
-					<a href="#default" class="uk-float-right" v-on:click="setDefault()">Set Defaults</a>
-					<div class="uk-form-row">
-						<div class="uk-form-controls">
-						</div>
-						<label class="uk-form-label" for="settings-home-page">Home Page</label>
-						<div class="uk-form-controls">
-							<input type="text" class="uk-form-width-large" id="settings-home-page" placeholder="http://www.keiser.com" v-model="homePage" v-bind:class="{ 'uk-form-success': homePageValid, 'uk-form-danger': !homePageValid }">
-						</div>
+			<form class="uk-form uk-form-stacked" v-on:submit.prevent>
+				<a href="#default" class="uk-float-right" v-on:click="setDefault()">Set Defaults</a>
+				<div class="uk-form-row">
+					<div class="uk-form-controls">
 					</div>
-					<div class="uk-form-row">							
-						<label class="uk-form-label">Upload Behavior</label>
-						<div class="uk-form-controls">
-							<input type="checkbox" id="settings-erase-after-upload" v-model="eraseOnUpload">
-							<label for="settings-erase-after-upload">Erase After Successful Upload</label>
-						</div>
+					<label class="uk-form-label" for="settings-home-page">Home Page</label>
+					<div class="uk-form-controls">
+						<input type="text" class="uk-form-width-large" id="settings-home-page" placeholder="http://www.keiser.com" v-model="homePage" v-bind:class="{ 'uk-form-success': homePageValid, 'uk-form-danger': !homePageValid }">
 					</div>
-				</form>
+				</div>
+				<div class="uk-form-row">
+					<label class="uk-form-label">Upload Behavior</label>
+					<div class="uk-form-controls">
+						<input type="checkbox" id="settings-erase-after-upload" v-model="eraseOnUpload">
+						<label for="settings-erase-after-upload">Erase After Successful Upload</label>
+					</div>
+				</div>
+			</form>
 			<div class="uk-modal-footer">
 				<button class="uk-button uk-modal-close">Cancel</button>
 				<button class="uk-button uk-button-primary uk-float-right uk-modal-close" v-on:click="save()" :disabled="!settingsValid">Save</button>
 			</div>
 		</div>
 	</div>
-	
+
 	<div id="help-modal" class="uk-modal">
 		<div class="uk-modal-dialog">
 			<a class="uk-modal-close uk-close"></a>
 			<div class="uk-modal-header">
 				<h1>Help</h1>
 			</div>
-				HELP!
+			HELP!
 		</div>
 	</div>
-	
+
 	<div id="confirm-erase-modal" class="uk-modal">
 		<div class="uk-modal-dialog">
 			<p>Erase all data from eChip: {{ keyID }} ?</p>
@@ -64,7 +65,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<div id="echip-modal" class="uk-modal">
 		<div class="uk-modal-dialog">
 			<a class="uk-modal-close uk-close"></a>
@@ -72,21 +73,22 @@
 			<a href="#refresh" class="uk-float-right" v-on:click="keyRefresh()">
 				<i class="uk-icon-refresh" v-bind:class="{ 'uk-icon-spin': eChipStatus.keyAction != '' }"></i>
 			</a>
-			<p><strong>ID: </strong>{{ keyID }}<br>
-			<strong>State: </strong>
-			<template v-if="eChipStatus.keyConnected">
-				<template v-if="eChipStatus.keyAction == ''">Idle</template>
-				<template v-if="eChipStatus.keyAction == 'get'">Reading</template>
-				<template v-if="eChipStatus.keyAction == 'set'">Writing</template>
-				<template v-if="eChipStatus.keyAction == 'clear'">Erasing</template>
-			</template>
-			<template v-if="!eChipStatus.keyConnected">Disconnected</template>
+			<p><strong>ID: </strong>{{ keyID }}
+				<br>
+				<strong>State: </strong>
+				<template v-if="eChipStatus.keyConnected">
+					<template v-if="eChipStatus.keyAction == ''">Idle</template>
+					<template v-if="eChipStatus.keyAction == 'get'">Reading</template>
+					<template v-if="eChipStatus.keyAction == 'set'">Writing</template>
+					<template v-if="eChipStatus.keyAction == 'clear'">Erasing</template>
+				</template>
+				<template v-if="!eChipStatus.keyConnected">Disconnected</template>
 			</p>
-		
+
 			<div>
 				<ul class="uk-tab">
 					<li v-bind:class="{ 'uk-active': modalDataDisplay == 1 }"><a href="#" v-on:click="modalDataDisplay = 1">Machine Data</a></li>
-					<li  v-bind:class="{ 'uk-active': modalDataDisplay == 2 }"><a href="#" v-on:click="modalDataDisplay = 2">Raw Key Data</a></li>
+					<li v-bind:class="{ 'uk-active': modalDataDisplay == 2 }"><a href="#" v-on:click="modalDataDisplay = 2">Raw Key Data</a></li>
 				</ul>
 				<div class="uk-overflow-container">
 					<ul id="modal-data-tabs" class="uk-switcher">
@@ -99,14 +101,14 @@
 					</ul>
 				</div>
 			</div>
-			
+
 		</div>
 	</div>
-	
+
 	<div id="web-portal-wrapper">
 		<webview id="web-portal" src=""></webview>
 	</div>
-	
+
 	<nav id="tool-bar" class="uk-navbar">
 		<span class="uk-navbar-brand">
 			<span class="keiser-font"><span class="keiser-k-padding">K</span>EISER®</span>
@@ -117,8 +119,8 @@
 		<ul class="uk-navbar-nav" v-show="eChipStatus.keyConnected">
 			<li>
 				<a href="#echip-modal" class="echip-status-tab uk-navbar-nav-subtitle" data-uk-modal="{center:true}">
-					eChip 
-					<template v-if="eChipStatus.keyAction"><i class="uk-icon-spinner uk-icon-spin"></i> </template>	
+					eChip
+					<template v-if="eChipStatus.keyAction"><i class="uk-icon-spinner uk-icon-spin"></i> </template>
 					<template v-if="!eChipStatus.keyAction && eChipKeyState.read && eChipKeyState.empty"><div class="uk-badge uk-badge-notification uk-badge-warning">E</div></template>
 					<template v-if="!eChipStatus.keyAction & eChipKeyState.read && !eChipKeyState.empty"><div class="uk-badge uk-badge-notification uk-badge-success">D</div></template>
 					<div>
@@ -158,4 +160,5 @@
 		</div>
 	</nav>
 </body>
+
 </html>

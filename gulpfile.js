@@ -30,56 +30,59 @@ if (production) {
 }
 
 gulp.task('js-bundle', function () {
-	browserify(mainScript).bundle()
-	.pipe(source(mainScript))
-	.pipe(production ? streamify(uglify()) : util.noop())
-	.pipe(rename({
-			dirname : '/',
-			basename : 'bundle'
+	browserify(mainScript)
+		.bundle()
+		.pipe(source(mainScript))
+		.pipe(production ? streamify(uglify()) : util.noop())
+		.pipe(rename({
+			dirname: '/',
+			basename: 'bundle'
 		}))
-	.pipe(gulp.dest(appDir));
+		.pipe(gulp.dest(appDir));
 });
 
 gulp.task('background-bundle', function () {
-	browserify(backgroundScript).bundle()
-	.pipe(source(backgroundScript))
-	.pipe(production ? streamify(uglify()) : util.noop())
-	.pipe(rename({
-			dirname : '/',
-			basename : 'background'
+	browserify(backgroundScript)
+		.bundle()
+		.pipe(source(backgroundScript))
+		.pipe(production ? streamify(uglify()) : util.noop())
+		.pipe(rename({
+			dirname: '/',
+			basename: 'background'
 		}))
-	.pipe(gulp.dest(appDir));
+		.pipe(gulp.dest(appDir));
 });
 
 gulp.task('css-bundle', function () {
 	return gulp.src(mainStyle)
-	.pipe(less())
-	.pipe(production ? minifyCss() : util.noop())
-	.pipe(rename({
-			dirname : '/',
-			basename : 'bundle'
+		.pipe(less())
+		.pipe(production ? minifyCss() : util.noop())
+		.pipe(rename({
+			dirname: '/',
+			basename: 'bundle'
 		}))
-	.pipe(gulp.dest(appDir));
+		.pipe(gulp.dest(appDir));
 });
 
 gulp.task('move-fonts', function () {
 	gulp.src(fontFiles)
-	.pipe(rename({
-			dirname : '/fonts'
+		.pipe(rename({
+			dirname: '/fonts'
 		}))
-	.pipe(gulp.dest(appDir));
+		.pipe(gulp.dest(appDir));
 });
 
 gulp.task('external-bundle', function () {
 	var externalTestFile = externalTestDir + 'src/main.js';
-	browserify(externalTestFile).bundle()
-	.pipe(source(externalTestFile))
-	.pipe(production ? streamify(uglify()) : util.noop())
-	.pipe(rename({
-			dirname : '/',
-			basename : 'bundle'
+	browserify(externalTestFile)
+		.bundle()
+		.pipe(source(externalTestFile))
+		.pipe(production ? streamify(uglify()) : util.noop())
+		.pipe(rename({
+			dirname: '/',
+			basename: 'bundle'
 		}))
-	.pipe(gulp.dest(externalTestDir + '/dist'));
+		.pipe(gulp.dest(externalTestDir + '/dist'));
 });
 
 gulp.task('default', function () {
