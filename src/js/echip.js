@@ -20,10 +20,10 @@ module.exports = function () {
 	 *	Initialization
 	 */
 	eChip.initialize = function () {
-		ow.checkPermission()
+		ow.permission.check()
 			.then(gotPermission);
-		ow.onDeviceAdded.addListener(deviceConnected);
-		ow.onDeviceRemoved.addListener(deviceRemoved);
+		ow.device.onDeviceAdded.addListener(deviceConnected);
+		ow.device.onDeviceRemoved.addListener(deviceRemoved);
 	};
 
 	/*
@@ -39,7 +39,7 @@ module.exports = function () {
 	};
 
 	eChip.requestPermission = function () {
-		ow.requestPermission()
+		ow.permission.request()
 			.then(gotPermission, failedPermission);
 	};
 
@@ -48,12 +48,12 @@ module.exports = function () {
 	 */
 	var awaitDevice = function () {
 		deviceRemoved();
-		ow.deviceOpen()
+		ow.device.open()
 			.then(deviceOpened);
 	};
 
 	var deviceConnected = function (device) {
-		ow.deviceOpen()
+		ow.device.open()
 			.then(deviceOpened);
 	};
 
@@ -67,7 +67,7 @@ module.exports = function () {
 
 	var deviceOpened = function () {
 		eChip.status.deviceConnected = true;
-		ow.deviceReset()
+		ow.device.reset()
 			.then(keyGetRom);
 	};
 
@@ -102,7 +102,7 @@ module.exports = function () {
 	 */
 	var keyAwait = function () {
 		var interruptTimeout = function (result) {
-			if(result.ResultRegisters && result.ResultRegisters.DetectKey) {
+			if (result.ResultRegisters && result.ResultRegisters.DetectKey) {
 				keyGetRom()
 					.fail(function () {
 						keyAwait();
@@ -116,7 +116,7 @@ module.exports = function () {
 			}
 		};
 		setTimeout(function () {
-			ow.deviceInterruptTransfer()
+			ow.device.interruptTransfer()
 				.then(interruptTimeout);
 		}, 500);
 	};
@@ -129,7 +129,7 @@ module.exports = function () {
 			};
 			km.runNext = function (nextCommand) {
 				var fn = commands.shift();
-				if(fn) {
+				if (fn) {
 					return fn.call()
 						.then(nextCommand)
 						.fail(function (e) {
@@ -150,9 +150,9 @@ module.exports = function () {
 
 	var keyMonitor = function () {
 		setTimeout(function () {
-			ow.keySearchFirst()
+			ow.key.searchFirst()
 				.then(function (rom) {
-					if(romsAreEqual(rom, eChip.keyState.rom)) {
+					if (romsAreEqual(rom, eChip.keyState.rom)) {
 						keyMonitorQueue.runNext(keyMonitor);
 					} else {
 						keyAwait();
@@ -170,9 +170,9 @@ module.exports = function () {
 	};
 
 	var keyGetRom = function () {
-		return ow.keySearchFirst()
+		return ow.key.searchFirst()
 			.then(function (rom) {
-				if(rom[0] === 0x0C) {
+				if (rom[0] === 0x0C) {
 					eChip.keyState.rom = rom;
 					eChip.status.keyConnected = true;
 					keyMonitorQueue.clear();
@@ -190,7 +190,7 @@ module.exports = function () {
 	var keyGetData = function (retry) {
 		eChip.status.keyAction = 'get';
 		keyStateDataClear();
-		return ow.keyReadAll(eChip.keyState.rom, true)
+		return ow.key.readAll(eChip.keyState.rom, true)
 			.then(function (data) {
 				eChip.keyState.data = data;
 				eChip.keyState.read = true;
@@ -202,12 +202,12 @@ module.exports = function () {
 				return eChip.keyState;
 			})
 			.fail(function (error) {
-				if(retry) {
+				if (retry) {
 					console.log('Memory Read Error: ' + error.message + ' [Cancelled]');
 					eChip.status.error = 'Memory Read Error';
 				} else {
 					console.log('Memory Read Error: ' + error.message + ' [Retrying]');
-					return ow.deviceReset()
+					return ow.device.reset()
 						.then(function () {
 							return keyGetData(true);
 						});
@@ -218,19 +218,19 @@ module.exports = function () {
 	var keyWriteData = function (data, retry) {
 		eChip.status.keyAction = 'set';
 		keyStateDataClear();
-		return ow.keyWriteDiff(eChip.keyState.rom, data, eChip.keyState.data, true)
+		return ow.key.writeDiff(eChip.keyState.rom, data, eChip.keyState.data, true)
 			.then(function () {
 				eChip.status.keyAction = '';
 				eChip.status.error = '';
 				return keyGetData();
 			})
 			.fail(function (error) {
-				if(retry) {
+				if (retry) {
 					console.log('Memory Write Error: ' + error.message + ' [Cancelled]');
 					eChip.status.error = 'Memory Write Error';
 				} else {
 					console.log('Memory Write Error: ' + error.message + ' [Retrying]');
-					return ow.deviceReset()
+					return ow.device.reset()
 						.then(function () {
 							return keyWriteData(data, true);
 						});
@@ -241,19 +241,19 @@ module.exports = function () {
 	var keyClearData = function (retry) {
 		eChip.status.keyAction = 'clear';
 		keyStateDataClear();
-		return ow.keyWriteDiff(eChip.keyState.rom, eChipParser.buildEmpty(), eChip.keyState.data, true)
+		return ow.key.writeDiff(eChip.keyState.rom, eChipParser.buildEmpty(), eChip.keyState.data, true)
 			.then(function () {
 				eChip.status.keyAction = '';
 				eChip.status.error = '';
 				return keyGetData();
 			})
 			.fail(function (error) {
-				if(retry) {
+				if (retry) {
 					console.log('Memory Clear Error: ' + error.message + ' [Cancelled]');
 					eChip.status.error = 'Memory Clear Error';
 				} else {
 					console.log('Memory Clear Error: ' + error.message + ' [Retrying]');
-					return ow.deviceReset()
+					return ow.device.reset()
 						.then(function () {
 							return keyClearData(true);
 						});
@@ -279,9 +279,9 @@ module.exports = function () {
 	};
 
 	eChip.keyRead = function (callback) {
-		if(!eChip.keyState.data) {
+		if (!eChip.keyState.data) {
 			keyMonitorQueue.add(function () {
-				if(!eChip.keyState.data) {
+				if (!eChip.keyState.data) {
 					return keyGetData()
 						.then(callback);
 				} else {
