@@ -11,10 +11,21 @@ var eChip = require('./echip.js');
 Vue.config.delimiters = ['{%', '%}'];
 Vue.config.unsafeDelimiters = ['{%!', '!%}'];
 
+/*
+ *	Constants
+ */
 const DEFAULT_HOME = 'http://devx.keiser.com/echip';
-const ACTIONS = {
-	ECHIP_SET: 'echip-set',
-	ECHIP_GET: 'echip-get'
+const SETTINGS_KEY = 'settings';
+const MESSENGER_CONST = {
+	TYPE: {
+		RESPONSE: 'response',
+		REQUEST: 'request'
+	},
+	ACTION: {
+		CONNECT: 'connect',
+		ECHIP_SET: 'echip-set',
+		ECHIP_GET: 'echip-get'
+	}
 };
 
 (function () {
@@ -83,13 +94,13 @@ const ACTIONS = {
 	};
 
 	var webPortalConnect = function () {
-		var message = webPortalMessageSendRequest('connect', null, webPortalConnectionAccepted);
+		var message = webPortalMessageSendRequest(MESSENGER_CONST.ACTION.CONNECT, null, webPortalConnectionAccepted);
 		webPortalState.initialized = true;
 	};
 
 	var webPortalConnectionAccepted = function (messageObject) {
 		if ((messageObject || {})
-			.action && messageObject.action == 'connect') {
+			.action && messageObject.action == MESSENGER_CONST.ACTION.CONNECT) {
 			webPortalState.connected = true;
 			webPortalState.actions = (messageObject.data.actions || []);
 		}
@@ -119,7 +130,7 @@ const ACTIONS = {
 	var webPortalMessageRequestGenerator = function (action, data) {
 		var message = webPortalMessageGenerator();
 		message.id = webPortalMessageGetID();
-		message.type = 'request';
+		message.type = MESSENGER_CONST.TYPE.REQUEST;
 		message.action = action;
 		message.data = data;
 		return message;
@@ -128,7 +139,7 @@ const ACTIONS = {
 	var webPortalMessageResponseGenerator = function (requestMessage, action, data) {
 		var message = webPortalMessageGenerator();
 		message.id = requestMessage.id;
-		message.type = 'response';
+		message.type = MESSENGER_CONST.TYPE.RESPONSE;
 		message.action = action;
 		message.data = data;
 		return message;
@@ -139,7 +150,7 @@ const ACTIONS = {
 		var messages = {};
 
 		mt.send = function (messageObject, callback) {
-			if (messageObject.type == 'request' && callback) {
+			if (messageObject.type == MESSENGER_CONST.TYPE.REQUEST && callback) {
 				messages[messageObject.id] = callback;
 			}
 			webPortal.contentWindow.postMessage(JSON.stringify(messageObject), webPortalState.target);
@@ -150,9 +161,9 @@ const ACTIONS = {
 			if (!messageObject.id || !messageObject.type) {
 				return;
 			}
-			if (messageObject.type == 'response' && messages[messageObject.id]) {
+			if (messageObject.type == MESSENGER_CONST.TYPE.RESPONSE && messages[messageObject.id]) {
 				messages[messageObject.id](messageObject);
-			} else if (messageObject.type == 'request') {
+			} else if (messageObject.type == MESSENGER_CONST.TYPE.REQUEST) {
 				requestReceiver(messageObject);
 			}
 		}
@@ -190,7 +201,7 @@ const ACTIONS = {
 	var settings = $.extend({}, settingsDefaults);
 
 	var settingsLoad = function () {
-		chrome.storage.local.get('settings', function (savedSettings) {
+		chrome.storage.local.get(SETTINGS_KEY, function (savedSettings) {
 			$.extend(settings, savedSettings.settings);
 		});
 		webPortalInitialize();
@@ -198,10 +209,10 @@ const ACTIONS = {
 
 	var settingsSave = function () {
 		if (validSettings(settings)) {
-			chrome.storage.local.remove('settings');
-			chrome.storage.local.set({
-				'settings': settings
-			});
+			var settingsObject = {};
+			settingsObject[SETTINGS_KEY] = settings;
+			chrome.storage.local.remove(SETTINGS_KEY);
+			chrome.storage.local.set(settingsObject);
 		}
 		settingsLoad();
 	};
@@ -226,10 +237,10 @@ const ACTIONS = {
 		},
 		computed: {
 			uploadReady: function () {
-				return (this.webPortalState.actions.indexOf('echip-set') > -1);
+				return (this.webPortalState.actions.indexOf(MESSENGER_CONST.ACTION.ECHIP_SET) > -1);
 			},
 			downloadReady: function () {
-				return (this.webPortalState.actions.indexOf('echip-get') > -1);
+				return (this.webPortalState.actions.indexOf(MESSENGER_CONST.ACTION.ECHIP_GET) > -1);
 			}
 		},
 		methods: {
@@ -400,7 +411,7 @@ const ACTIONS = {
 				id: eChipData.rom.toHexString(),
 				machines: eChipData.parsedData
 			}
-			webPortalMessageSendRequest(ACTIONS.ECHIP_SET, messageData, webPortalSendEChipResponse);
+			webPortalMessageSendRequest(MESSENGER_CONST.ACTION.ECHIP_SET, messageData, webPortalSendEChipResponse);
 		});
 	};
 
@@ -414,7 +425,7 @@ const ACTIONS = {
 	};
 
 	var webPortalGetEChip = function () {
-		webPortalMessageSendRequest(ACTIONS.ECHIP_GET, {}, webPortalGetEChipResponse);
+		webPortalMessageSendRequest(MESSENGER_CONST.ACTION.ECHIP_GET, {}, webPortalGetEChipResponse);
 	};
 
 	var webPortalGetEChipResponse = function (messageObject) {
