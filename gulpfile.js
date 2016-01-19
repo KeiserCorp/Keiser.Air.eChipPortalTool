@@ -8,10 +8,13 @@ var rename = require('gulp-rename');
 var util = require('gulp-util');
 var minifyCss = require('gulp-minify-css');
 var less = require('gulp-less');
+var handlebars = require('gulp-compile-handlebars');
+var markdown = require('gulp-markdown');
 
 var srcDir = './src/';
 var jsSrcDir = srcDir + 'js/';
 var lessSrcDir = srcDir + 'less/';
+var htmlSrcDir = srcDir + 'html/';
 var appDir = './app/';
 var externalTestDir = './external-test/';
 
@@ -82,11 +85,32 @@ gulp.task('external-bundle', function () {
 			dirname: '/',
 			basename: 'bundle'
 		}))
-		.pipe(gulp.dest(externalTestDir + '/dist'));
+		.pipe(gulp.dest(externalTestDir + 'dist'));
+});
+
+gulp.task('html-render', function () {
+	var templateData = {};
+	var options = {
+		batch: [htmlSrcDir + 'partials', htmlSrcDir + 'md/rendered']
+	};
+
+	return gulp.src(htmlSrcDir + 'index.html')
+		.pipe(handlebars(templateData, options))
+		.pipe(rename('index.html'))
+		.pipe(gulp.dest(appDir));
+});
+
+gulp.task('docs', function () {
+	return gulp.src(htmlSrcDir + 'md/*.md')
+		.pipe(markdown())
+		.pipe(rename({
+			extname: '.html'
+		}))
+		.pipe(gulp.dest(htmlSrcDir + 'md/rendered/'));
 });
 
 gulp.task('default', function () {
-	gulp.start('js-bundle', 'background-bundle', 'css-bundle', 'move-fonts', 'external-bundle');
+	gulp.start('js-bundle', 'background-bundle', 'css-bundle', 'move-fonts', 'external-bundle', 'html-render');
 });
 
 gulp.task('watch', function () {
@@ -94,4 +118,5 @@ gulp.task('watch', function () {
 	gulp.watch(jsSrcDir + 'background.js', ['background-bundle']);
 	gulp.watch(lessSrcDir + '**/*.less', ['css-bundle']);
 	gulp.watch(externalTestDir + 'src/**/*.js', ['external-bundle']);
+	gulp.watch(htmlSrcDir + '**/*.html', ['html-render']);
 });

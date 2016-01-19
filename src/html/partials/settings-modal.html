@@ -1,0 +1,34 @@
+<div id="settings-modal" class="uk-modal">
+	<div class="uk-modal-dialog">
+		<div class="uk-modal-header">
+			<h1>Settings
+					<a href="#help-modal" class="uk-float-right uk-navbar-nav-subtitle" data-uk-modal="{center:true}">
+						<i class="uk-icon-question-circle"></i>
+						<div class="uk-text-center">Help</div>
+					</a>
+				</h1>
+		</div>
+		<form class="uk-form uk-form-stacked" v-on:submit.prevent>
+			<a href="#default" class="uk-float-right" v-on:click="setDefault()">Set Defaults</a>
+			<div class="uk-form-row">
+				<div class="uk-form-controls">
+				</div>
+				<label class="uk-form-label" for="settings-home-page">Home Page</label>
+				<div class="uk-form-controls">
+					<input type="text" class="uk-form-width-large" id="settings-home-page" placeholder="http://www.keiser.com" v-model="homePage" v-bind:class="{ 'uk-form-success': homePageValid, 'uk-form-danger': !homePageValid }">
+				</div>
+			</div>
+			<div class="uk-form-row">
+				<label class="uk-form-label">Upload Behavior</label>
+				<div class="uk-form-controls">
+					<input type="checkbox" id="settings-erase-after-upload" v-model="eraseOnUpload">
+					<label for="settings-erase-after-upload">Erase After Successful Upload</label>
+				</div>
+			</div>
+		</form>
+		<div class="uk-modal-footer">
+			<button class="uk-button uk-modal-close">Cancel</button>
+			<button class="uk-button uk-button-primary uk-float-right uk-modal-close" v-on:click="save()" :disabled="!settingsValid">Save</button>
+		</div>
+	</div>
+</div>

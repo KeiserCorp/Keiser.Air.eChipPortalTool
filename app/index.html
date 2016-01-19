@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -15,11 +14,11 @@
 		<div class="uk-modal-dialog">
 			<div class="uk-modal-header">
 				<h1>Settings
-					<a href="#help-modal" class="uk-float-right uk-navbar-nav-subtitle" data-uk-modal="{center:true}">
-						<i class="uk-icon-question-circle"></i>
-						<div class="uk-text-center">Help</div>
-					</a>
-				</h1>
+						<a href="#help-modal" class="uk-float-right uk-navbar-nav-subtitle" data-uk-modal="{center:true}">
+							<i class="uk-icon-question-circle"></i>
+							<div class="uk-text-center">Help</div>
+						</a>
+					</h1>
 			</div>
 			<form class="uk-form uk-form-stacked" v-on:submit.prevent>
 				<a href="#default" class="uk-float-right" v-on:click="setDefault()">Set Defaults</a>
@@ -45,27 +44,28 @@
 			</div>
 		</div>
 	</div>
-
 	<div id="help-modal" class="uk-modal">
 		<div class="uk-modal-dialog">
 			<a class="uk-modal-close uk-close"></a>
-			<div class="uk-modal-header">
-				<h1>Help</h1>
+			<div class="uk-overflow-container">
+				<h1 id="help">Help</h1>
+				<ul>
+				<li><a href="#getting-started">Getting Started</a></li>
+				</ul>
+				<h2 id="getting-started">Getting Started</h2>
+				<p>The Keiser eChip Portal Tool allows communication between a Keiser eChip and supported web applications.  To begin, plug in a <a href="http://www.mouser.com/search/ProductDetail.aspx?R=0virtualkey0virtualkeyDS9490R">Maxim Integrated DS9490R USB to 1-Wire® Adapter</a> and install the appropriate <a href="https://www.maximintegrated.com/en/products/ibutton/software/tmex/download_drivers.cfm">Maxim Integrated Drivers</a>.</p>
 			</div>
-			HELP!
 		</div>
 	</div>
-
 	<div id="confirm-erase-modal" class="uk-modal">
 		<div class="uk-modal-dialog">
-			<p>Erase all data from eChip: {{ keyID }} ?</p>
+			<p>Erase all data from eChip: {% keyID %} ?</p>
 			<div class="uk-modal-footer">
 				<button class="uk-button uk-modal-close">Cancel</button>
 				<button class="uk-button uk-button-primary uk-float-right uk-modal-close" v-on:click="keyClear">Erase</button>
 			</div>
 		</div>
 	</div>
-
 	<div id="echip-modal" class="uk-modal">
 		<div class="uk-modal-dialog">
 			<a class="uk-modal-close uk-close"></a>
@@ -73,7 +73,7 @@
 			<a href="#refresh" class="uk-float-right" v-on:click="keyRefresh()">
 				<i class="uk-icon-refresh" v-bind:class="{ 'uk-icon-spin': eChipStatus.keyAction != '' }"></i>
 			</a>
-			<p><strong>ID: </strong>{{ keyID }}
+			<p><strong>ID: </strong>{% keyID %}
 				<br>
 				<strong>State: </strong>
 				<template v-if="eChipStatus.keyConnected">
@@ -84,7 +84,7 @@
 				</template>
 				<template v-if="!eChipStatus.keyConnected">Disconnected</template>
 			</p>
-
+	
 			<div>
 				<ul class="uk-tab">
 					<li v-bind:class="{ 'uk-active': modalDataDisplay == 1 }"><a href="#" v-on:click="modalDataDisplay = 1">Machine Data</a></li>
@@ -93,25 +93,23 @@
 				<div class="uk-overflow-container">
 					<ul id="modal-data-tabs" class="uk-switcher">
 						<li v-bind:class="{ 'uk-active': modalDataDisplay == 1 }">
-							<pre class="syntax-highlight">{{{ keyParsedData }}}</pre>
+							<pre class="syntax-highlight">{%! keyParsedData !%}</pre>
 						</li>
 						<li v-bind:class="{ 'uk-active': modalDataDisplay == 2 }">
-							<pre class="syntax-highlight">{{{ keyData }}}</pre>
+							<pre class="syntax-highlight">{%! keyData !%}</pre>
 						</li>
 					</ul>
 				</div>
 			</div>
-
+	
 		</div>
 	</div>
-
 	<div id="web-portal-wrapper">
 		<webview id="web-portal" src=""></webview>
 	</div>
-
 	<nav id="tool-bar" class="uk-navbar">
 		<span class="uk-navbar-brand">
-			<span class="keiser-font"><span class="keiser-k-padding">K</span>EISER®</span>
+	    <span class="keiser-font"><span class="keiser-k-padding">K</span>EISER®</span>
 		</span>
 		<ul class="uk-navbar-nav" v-show="!eChipStatus.permissionGranted">
 			<li><a href="#find" v-on:click="getPermission()"><i class="uk-icon-search"></i> Find eChip Reader</a></li>
@@ -119,17 +117,17 @@
 		<ul class="uk-navbar-nav" v-show="eChipStatus.keyConnected">
 			<li>
 				<a href="#echip-modal" class="echip-status-tab uk-navbar-nav-subtitle" data-uk-modal="{center:true}">
-					eChip
-					<template v-if="eChipStatus.keyAction"><i class="uk-icon-spinner uk-icon-spin"></i> </template>
-					<template v-if="!eChipStatus.keyAction && eChipKeyState.read && eChipKeyState.empty"><div class="uk-badge uk-badge-notification uk-badge-warning">E</div></template>
-					<template v-if="!eChipStatus.keyAction & eChipKeyState.read && !eChipKeyState.empty"><div class="uk-badge uk-badge-notification uk-badge-success">D</div></template>
-					<div>
-					<template v-if="eChipStatus.keyAction == ''">Connected</template>
-					<template v-if="eChipStatus.keyAction == 'get'">Reading</template>
-					<template v-if="eChipStatus.keyAction == 'set'">Writing</template>
-					<template v-if="eChipStatus.keyAction == 'clear'">Erasing</template>
-					</div>
-				</a>
+	        eChip
+	        <template v-if="eChipStatus.keyAction"><i class="uk-icon-spinner uk-icon-spin"></i> </template>
+	        <template v-if="!eChipStatus.keyAction && eChipKeyState.read && eChipKeyState.empty"><div class="uk-badge uk-badge-notification uk-badge-warning">E</div></template>
+	        <template v-if="!eChipStatus.keyAction & eChipKeyState.read && !eChipKeyState.empty"><div class="uk-badge uk-badge-notification uk-badge-success">D</div></template>
+	        <div>
+	        <template v-if="eChipStatus.keyAction == ''">Connected</template>
+	        <template v-if="eChipStatus.keyAction == 'get'">Reading</template>
+	        <template v-if="eChipStatus.keyAction == 'set'">Writing</template>
+	        <template v-if="eChipStatus.keyAction == 'clear'">Erasing</template>
+	        </div>
+	      </a>
 			</li>
 			<li v-show="uploadReady"><a href="#key-upload" class="uk-navbar-nav-subtitle" v-on:click="keyUpload()"><i class="uk-icon-cloud-upload"></i> Upload<div class="uk-text-center">to Cloud</div></a></li>
 			<li v-show="downloadReady"><a href="#key-download" class="uk-navbar-nav-subtitle" v-on:click="keyDownload()"><i class="uk-icon-download"></i> Download<div class="uk-text-center">to eChip</div></a></li>
@@ -138,7 +136,7 @@
 		<div class="uk-navbar-flip">
 			<ul class="uk-navbar-nav">
 				<li v-if="eChipStatus.error">
-					<div class="uk-alert uk-alert-danger"><i class="uk-icon-warning"></i> {{ eChipStatus.error }}</div>
+					<div class="uk-alert uk-alert-danger"><i class="uk-icon-warning"></i> {% eChipStatus.error %}</div>
 				</li>
 				<li>
 					<a href="#home" class="uk-navbar-nav-subtitle uk-text-center" v-on:click="goHome()">
@@ -160,5 +158,4 @@
 		</div>
 	</nav>
 </body>
-
 </html>

@@ -1,0 +1,38 @@
+<div id="echip-modal" class="uk-modal">
+	<div class="uk-modal-dialog">
+		<a class="uk-modal-close uk-close"></a>
+		<h1>eChip Information</h1>
+		<a href="#refresh" class="uk-float-right" v-on:click="keyRefresh()">
+			<i class="uk-icon-refresh" v-bind:class="{ 'uk-icon-spin': eChipStatus.keyAction != '' }"></i>
+		</a>
+		<p><strong>ID: </strong>{% keyID %}
+			<br>
+			<strong>State: </strong>
+			<template v-if="eChipStatus.keyConnected">
+				<template v-if="eChipStatus.keyAction == ''">Idle</template>
+				<template v-if="eChipStatus.keyAction == 'get'">Reading</template>
+				<template v-if="eChipStatus.keyAction == 'set'">Writing</template>
+				<template v-if="eChipStatus.keyAction == 'clear'">Erasing</template>
+			</template>
+			<template v-if="!eChipStatus.keyConnected">Disconnected</template>
+		</p>
+
+		<div>
+			<ul class="uk-tab">
+				<li v-bind:class="{ 'uk-active': modalDataDisplay == 1 }"><a href="#" v-on:click="modalDataDisplay = 1">Machine Data</a></li>
+				<li v-bind:class="{ 'uk-active': modalDataDisplay == 2 }"><a href="#" v-on:click="modalDataDisplay = 2">Raw Key Data</a></li>
+			</ul>
+			<div class="uk-overflow-container">
+				<ul id="modal-data-tabs" class="uk-switcher">
+					<li v-bind:class="{ 'uk-active': modalDataDisplay == 1 }">
+						<pre class="syntax-highlight">{%! keyParsedData !%}</pre>
+					</li>
+					<li v-bind:class="{ 'uk-active': modalDataDisplay == 2 }">
+						<pre class="syntax-highlight">{%! keyData !%}</pre>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+	</div>
+</div>

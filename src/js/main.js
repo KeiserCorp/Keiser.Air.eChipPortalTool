@@ -5,6 +5,12 @@ UIkit = window.UIkit;
 var Vue = require('vue');
 var eChip = require('./echip.js');
 
+/*
+ *	Vue Configure
+ */
+Vue.config.delimiters = ['{%', '%}'];
+Vue.config.unsafeDelimiters = ['{%!', '!%}'];
+
 const DEFAULT_HOME = 'http://devx.keiser.com/echip';
 const ACTIONS = {
 	ECHIP_SET: 'echip-set',
@@ -17,11 +23,23 @@ const ACTIONS = {
 	 *	Initialization
 	 */
 	var windowInitialize = function () {
+		setBodyAttributes();
 		settingsLoad();
 		eChip.initialize();
 	};
 
 	window.onload = windowInitialize;
+
+	/*
+	 *	Sets Body Attributes
+	 */
+	var setBodyAttributes = function () {
+		$(document.links)
+			.filter(function () {
+				return this.hostname != window.location.hostname;
+			})
+			.attr('target', '_blank');
+	};
 
 	/*
 	 *	Web Portal Handlers
@@ -37,7 +55,7 @@ const ACTIONS = {
 	var webPortalTargetDomain = function () {
 		var domain,
 			url = settings.homePage;
-		if(url.indexOf("://") > -1) {
+		if (url.indexOf("://") > -1) {
 			domain = url.split('/')[2];
 		} else {
 			domain = url.split('/')[0];
@@ -55,7 +73,7 @@ const ACTIONS = {
 	};
 
 	var webPortalRequestEvent = function (requestDetails) {
-		if(requestDetails.type === "main_frame") {
+		if (requestDetails.type === "main_frame") {
 			webPortalState.connected = false;
 			webPortalState.initialized = false;
 			webPortalState.target = requestDetails.url;
@@ -70,7 +88,7 @@ const ACTIONS = {
 	};
 
 	var webPortalConnectionAccepted = function (messageObject) {
-		if((messageObject || {})
+		if ((messageObject || {})
 			.action && messageObject.action == 'connect') {
 			webPortalState.connected = true;
 			webPortalState.actions = (messageObject.data.actions || []);
@@ -121,7 +139,7 @@ const ACTIONS = {
 		var messages = {};
 
 		mt.send = function (messageObject, callback) {
-			if(messageObject.type == 'request' && callback) {
+			if (messageObject.type == 'request' && callback) {
 				messages[messageObject.id] = callback;
 			}
 			webPortal.contentWindow.postMessage(JSON.stringify(messageObject), webPortalState.target);
@@ -129,12 +147,12 @@ const ACTIONS = {
 
 		mt.receive = function (messageEvent) {
 			var messageObject = JSON.parse(messageEvent.data);
-			if(!messageObject.id || !messageObject.type) {
+			if (!messageObject.id || !messageObject.type) {
 				return;
 			}
-			if(messageObject.type == 'response' && messages[messageObject.id]) {
+			if (messageObject.type == 'response' && messages[messageObject.id]) {
 				messages[messageObject.id](messageObject);
-			} else if(messageObject.type == 'request') {
+			} else if (messageObject.type == 'request') {
 				requestReceiver(messageObject);
 			}
 		}
@@ -179,7 +197,7 @@ const ACTIONS = {
 	};
 
 	var settingsSave = function () {
-		if(validSettings(settings)) {
+		if (validSettings(settings)) {
 			chrome.storage.local.remove('settings');
 			chrome.storage.local.set({
 				'settings': settings
@@ -208,10 +226,10 @@ const ACTIONS = {
 		},
 		computed: {
 			uploadReady: function () {
-				return(this.webPortalState.actions.indexOf('echip-set') > -1);
+				return (this.webPortalState.actions.indexOf('echip-set') > -1);
 			},
 			downloadReady: function () {
-				return(this.webPortalState.actions.indexOf('echip-get') > -1);
+				return (this.webPortalState.actions.indexOf('echip-get') > -1);
 			}
 		},
 		methods: {
@@ -243,7 +261,7 @@ const ACTIONS = {
 		},
 		computed: {
 			keyID: function () {
-				if(this.eChipKeyState.rom) {
+				if (this.eChipKeyState.rom) {
 					return this.eChipKeyState.rom.toHexString();
 				}
 			}
@@ -313,17 +331,17 @@ const ACTIONS = {
 		},
 		computed: {
 			keyID: function () {
-				if(this.eChipKeyState.rom) {
+				if (this.eChipKeyState.rom) {
 					return this.eChipKeyState.rom.toHexString();
 				}
 			},
 			keyData: function () {
-				if(this.eChipKeyState.data) {
+				if (this.eChipKeyState.data) {
 					return eChipModalDataHighlight(this.eChipKeyState.data);
 				}
 			},
 			keyParsedData: function () {
-				if(this.eChipKeyState.parsedData) {
+				if (this.eChipKeyState.parsedData) {
 					return eChipModalSyntaxHighlight(this.eChipKeyState.parsedData);
 				}
 			}
@@ -358,15 +376,15 @@ const ACTIONS = {
 			.replace(/>/g, '&gt;');
 		return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
 			var cls = 'number';
-			if(/^"/.test(match)) {
-				if(/:$/.test(match)) {
+			if (/^"/.test(match)) {
+				if (/:$/.test(match)) {
 					cls = 'key';
 				} else {
 					cls = 'string';
 				}
-			} else if(/true|false/.test(match)) {
+			} else if (/true|false/.test(match)) {
 				cls = 'boolean';
-			} else if(/null/.test(match)) {
+			} else if (/null/.test(match)) {
 				cls = 'null';
 			}
 			return '<span class="' + cls + '">' + match + '</span>';
@@ -387,9 +405,9 @@ const ACTIONS = {
 	};
 
 	var webPortalSendEChipResponse = function (messageObject) {
-		if((messageObject || {})
+		if ((messageObject || {})
 			.data && messageObject.data.success) {
-			if(settings.eraseOnUpload) {
+			if (settings.eraseOnUpload) {
 				eChip.keyClear();
 			}
 		}
@@ -400,7 +418,7 @@ const ACTIONS = {
 	};
 
 	var webPortalGetEChipResponse = function (messageObject) {
-		if((messageObject || {})
+		if ((messageObject || {})
 			.data) {
 			eChip.keyWrite(messageObject.data);
 		}
