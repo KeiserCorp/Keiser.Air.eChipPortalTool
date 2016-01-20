@@ -27,13 +27,13 @@
 					</div>
 					<label class="uk-form-label" for="settings-home-page">Home Page</label>
 					<div class="uk-form-controls">
-						<input type="text" class="uk-form-width-large" id="settings-home-page" placeholder="http://www.keiser.com" v-model="homePage" v-bind:class="{ 'uk-form-success': homePageValid, 'uk-form-danger': !homePageValid }">
+						<input type="text" class="uk-form-width-large" id="settings-home-page" placeholder="http://www.keiser.com" v-model="settings.homePage" v-bind:class="{ 'uk-form-success': homePageValid, 'uk-form-danger': !homePageValid }">
 					</div>
 				</div>
 				<div class="uk-form-row">
 					<label class="uk-form-label">Upload Behavior</label>
 					<div class="uk-form-controls">
-						<input type="checkbox" id="settings-erase-after-upload" v-model="eraseOnUpload">
+						<input type="checkbox" id="settings-erase-after-upload" v-model="settings.eraseOnUpload">
 						<label for="settings-erase-after-upload">Erase After Successful Upload</label>
 					</div>
 				</div>

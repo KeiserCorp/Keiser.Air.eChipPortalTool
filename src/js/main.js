@@ -1,34 +1,26 @@
-'use strict';
-var $ = window.jQuery = require('jquery');
-var UIkit = require('uikit');
-UIkit = window.UIkit;
-var Vue = require('vue');
-var eChip = require('./echip.js');
-
-/*
- *	Vue Configure
- */
-Vue.config.delimiters = ['{%', '%}'];
-Vue.config.unsafeDelimiters = ['{%!', '!%}'];
-
-/*
- *	Constants
- */
-const DEFAULT_HOME = 'http://devx.keiser.com/echip';
-const SETTINGS_KEY = 'settings';
-const MESSENGER_CONST = {
-	TYPE: {
-		RESPONSE: 'response',
-		REQUEST: 'request'
-	},
-	ACTION: {
-		CONNECT: 'connect',
-		ECHIP_SET: 'echip-set',
-		ECHIP_GET: 'echip-get'
-	}
-};
-
 (function () {
+	'use strict';
+	var $ = window.jQuery = require('jquery');
+	require('uikit');
+	var Vue = require('vue');
+	var eChip = require('./echip.js');
+
+	/*
+	 *	Constants
+	 */
+	const DEFAULT_HOME = 'http://devx.keiser.com/echip';
+	const SETTINGS_KEY = 'settings';
+	const MESSENGER_CONST = {
+		TYPE: {
+			RESPONSE: 'response',
+			REQUEST: 'request'
+		},
+		ACTION: {
+			CONNECT: 'connect',
+			ECHIP_SET: 'echip-set',
+			ECHIP_GET: 'echip-get'
+		}
+	};
 
 	/*
 	 *	Initialization
@@ -40,6 +32,12 @@ const MESSENGER_CONST = {
 	};
 
 	window.onload = windowInitialize;
+
+	/*
+	 *	Vue Configure
+	 */
+	Vue.config.delimiters = ['{%', '%}'];
+	Vue.config.unsafeDelimiters = ['{%!', '!%}'];
 
 	/*
 	 *	Sets Body Attributes
@@ -298,13 +296,15 @@ const MESSENGER_CONST = {
 
 	var settingsVue = new Vue({
 		el: '#settings-modal',
-		data: settingsVueSettings,
+		data: {
+			settings: settingsVueSettings
+		},
 		computed: {
 			homePageValid: function () {
-				return validUrl(this.homePage);
+				return validUrl(this.settings.homePage);
 			},
 			settingsValid: function () {
-				return validSettings(this);
+				return validSettings(this.settings);
 			}
 		},
 		methods: {
