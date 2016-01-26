@@ -1,6 +1,5 @@
 (function () {
 	var keu = require('keiser-echip-utilities');
-	/*var keu = require('D:/Development/Keiser/Keiser.Air/Keiser.Air.eChipUtilities/');*/
 	var testData = require('./test-data.js');
 	var output = document.getElementById("output");
 
