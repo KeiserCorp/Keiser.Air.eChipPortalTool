@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var runSequence = require('run-sequence');
 var watch = require('gulp-watch');
 var source = require('vinyl-source-stream');
 var streamify = require('gulp-streamify');
@@ -10,6 +11,8 @@ var minifyCss = require('gulp-minify-css');
 var less = require('gulp-less');
 var handlebars = require('gulp-compile-handlebars');
 var markdown = require('gulp-markdown');
+var uncss = require('gulp-uncss');
+
 
 var srcDir = './src/';
 var jsSrcDir = srcDir + 'js/';
@@ -59,6 +62,10 @@ gulp.task('background-bundle', function () {
 gulp.task('css-bundle', function () {
 	return gulp.src(mainStyle)
 		.pipe(less())
+		.pipe(production ? uncss({
+			html: [appDir + 'index.html'],
+			ignore: [/uk\-modal/, /uk\-form/]
+		}) : util.noop())
 		.pipe(production ? minifyCss() : util.noop())
 		.pipe(rename({
 			dirname: '/',
@@ -100,7 +107,7 @@ gulp.task('html-render', function () {
 		.pipe(gulp.dest(appDir));
 });
 
-gulp.task('docs', function () {
+gulp.task('docs-transform', function () {
 	return gulp.src(htmlSrcDir + 'md/*.md')
 		.pipe(markdown())
 		.pipe(rename({
@@ -110,7 +117,9 @@ gulp.task('docs', function () {
 });
 
 gulp.task('default', function () {
-	gulp.start('js-bundle', 'background-bundle', 'css-bundle', 'move-fonts', 'external-bundle', 'html-render');
+	runSequence(
+		['js-bundle', 'background-bundle', 'move-fonts', 'external-bundle', 'docs-transform'], ['html-render'], ['css-bundle']
+	);
 });
 
 gulp.task('watch', function () {
