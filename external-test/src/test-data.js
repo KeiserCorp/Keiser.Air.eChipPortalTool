@@ -8,7 +8,7 @@ module.exports = function() {
 				"chest": null,
 				"rom2": null,
 				"rom1": null,
-				"seat": null,
+				"seat": null
 			},
 			"reps": [
 				{
@@ -21,7 +21,7 @@ module.exports = function() {
 					"units": "lb",
 					"repetitions": 10,
 					"peak": 324,
-					"work": 504.328125,
+					"work": 504.328125
 				}, {
 					"model": "1335",
 					"version": "3EC8495A",
@@ -32,16 +32,16 @@ module.exports = function() {
 					"units": "lb",
 					"repetitions": 10,
 					"peak": 326,
-					"work": 552,
+					"work": 552
 				},
-			],
+			]
 		},
 		"1531": {
 			"position": {
 				"chest": null,
 				"rom2": null,
 				"rom1": null,
-				"seat": null,
+				"seat": null
 			},
 			"reps": [
 				{
@@ -54,16 +54,16 @@ module.exports = function() {
 					"units": "lb",
 					"repetitions": 10,
 					"peak": 1156,
-					"work": 2425.953125,
+					"work": 2425.953125
 				}
-			],
+			]
 		},
 		"1621": {
 			"position": {
 				"chest": null,
 				"rom2": null,
 				"rom1": null,
-				"seat": null,
+				"seat": null
 			},
 			"reps": [
 				{
@@ -76,7 +76,7 @@ module.exports = function() {
 					"units": "lb",
 					"repetitions": 10,
 					"peak": 107,
-					"work": 166.515625,
+					"work": 166.515625
 				}, {
 					"model": "1621",
 					"version": "43597091",
@@ -87,16 +87,16 @@ module.exports = function() {
 					"units": "lb",
 					"repetitions": 10,
 					"peak": 98,
-					"work": 180.734375,
+					"work": 180.734375
 				},
-			],
+			]
 		},
 		"1921": {
 			"position": {
 				"chest": null,
 				"rom2": null,
 				"rom1": null,
-				"seat": null,
+				"seat": null
 			},
 			"reps": [
 				{
@@ -109,16 +109,16 @@ module.exports = function() {
 					"units": "lb",
 					"repetitions": 10,
 					"peak": 248,
-					"work": 402.578125,
+					"work": 402.578125
 				}
-			],
+			]
 		},
 		"2035": {
 			"position": {
 				"chest": null,
 				"rom2": null,
 				"rom1": null,
-				"seat": null,
+				"seat": null
 			},
 			"reps": [
 				{
@@ -131,16 +131,16 @@ module.exports = function() {
 					"units": "lb",
 					"repetitions": 10,
 					"peak": 676,
-					"work": 1381.09375,
+					"work": 1381.09375
 				}
-			],
+			]
 		},
 		"2121": {
 			"position": {
 				"chest": null,
 				"rom2": null,
 				"rom1": null,
-				"seat": null,
+				"seat": null
 			},
 			"reps": [
 				{
@@ -153,7 +153,7 @@ module.exports = function() {
 					"units": "lb",
 					"repetitions": 10,
 					"peak": 376,
-					"work": 941.921875,
+					"work": 941.921875
 				}, {
 					"model": "2121",
 					"version": "3EC8495A",
@@ -164,16 +164,16 @@ module.exports = function() {
 					"units": "lb",
 					"repetitions": 10,
 					"peak": 530,
-					"work": 989.109375,
+					"work": 989.109375
 				},
-			],
+			]
 		},
 		"2531": {
 			"position": {
 				"chest": null,
 				"rom2": null,
 				"rom1": null,
-				"seat": null,
+				"seat": null
 			},
 			"reps": [
 				{
@@ -186,16 +186,16 @@ module.exports = function() {
 					"units": "lb",
 					"repetitions": 10,
 					"peak": 1932,
-					"work": 2754.5625,
+					"work": 2754.5625
 				}
-			],
+			]
 		},
 		"2936": {
 			"position": {
 				"chest": null,
 				"rom2": null,
 				"rom1": null,
-				"seat": null,
+				"seat": null
 			},
 			"reps": [
 				{
@@ -208,16 +208,16 @@ module.exports = function() {
 					"units": "lb",
 					"repetitions": 23,
 					"peak": 198,
-					"work": 719.9375,
+					"work": 719.9375
 				}
-			],
+			]
 		},
 		"3010": {
 			"position": {
 				"chest": null,
 				"rom2": null,
 				"rom1": 0,
-				"seat": null,
+				"seat": null
 			},
 			"reps": [
 				{
@@ -230,16 +230,16 @@ module.exports = function() {
 					"units": "lb",
 					"repetitions": 10,
 					"peak": 152,
-					"work": 213.796875,
+					"work": 213.796875
 				}
-			],
+			]
 		},
 		"3020": {
 			"position": {
 				"chest": null,
 				"rom2": null,
 				"rom1": 0,
-				"seat": null,
+				"seat": null
 			},
 			"reps": [
 				{
@@ -252,10 +252,10 @@ module.exports = function() {
 					"units": "lb",
 					"repetitions": 10,
 					"peak": 280,
-					"work": 485.59375,
+					"work": 485.59375
 				}
-			],
-		},
+			]
+		}
 	}
 
 	data.test2 = {
@@ -275,8 +275,9 @@ module.exports = function() {
 					"resistance": 84,
 					"precision": "int",
 					"units": "lb",
-					"repetitions": null,
+					"repetitions": 6,
 					"test": {
+						"type": "power6r",
 						"low": {
 							"Power": 485,
 							"Velocity": 226,
@@ -444,8 +445,9 @@ module.exports = function() {
 					"resistance": 33.5,
 					"precision": "dec",
 					"units": "lb",
-					"repetitions": null,
+					"repetitions": 6,
 					"test": {
+						"type": "power6r",
 						"low": {
 							"Power": 246,
 							"Velocity": 168,
@@ -500,8 +502,9 @@ module.exports = function() {
 					"resistance": 6553.4,
 					"precision": "dec",
 					"units": "lb",
-					"repetitions": null,
+					"repetitions": 6,
 					"test": {
+						"type": "power6r",
 						"low": {
 							"Power": 165,
 							"Velocity": 133,
@@ -523,8 +526,9 @@ module.exports = function() {
 					"resistance": 26.1,
 					"precision": "dec",
 					"units": "lb",
-					"repetitions": null,
+					"repetitions": 6,
 					"test": {
+						"type": "power6r",
 						"low": {
 							"Power": 264,
 							"Velocity": 149,
