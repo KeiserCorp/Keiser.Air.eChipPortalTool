@@ -4,7 +4,7 @@
 	var output = document.getElementById("output");
 
 	keu.messenger.enable(function () {
-		return testData.test1;
+		return testData.test2;
 	}, function (data, success) {
 		output.innerHTML = syntaxHighlight(data);
 		success();

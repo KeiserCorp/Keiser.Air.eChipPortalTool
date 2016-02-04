@@ -64,7 +64,7 @@ gulp.task('css-bundle', function () {
 		.pipe(less())
 		.pipe(production ? uncss({
 			html: [appDir + 'index.html'],
-			ignore: [/uk\-modal/, /uk\-form/, /pre\.syntax\-highlight/]
+			ignore: [/uk\-modal/, /uk\-form/, /pre\.syntax\-highlight/, /.*\.uk\-tab/]
 		}) : util.noop())
 		.pipe(production ? minifyCss() : util.noop())
 		.pipe(rename({
