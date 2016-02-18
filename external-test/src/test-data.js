@@ -6,262 +6,6 @@ module.exports = function() {
 		"1335": {
 			"position": {
 				"chest": null,
-				"rom2": null,
-				"rom1": null,
-				"seat": null
-			},
-			"reps": [
-				{
-					"model": "1335",
-					"version": "3EC8495A",
-					"serial": "0124 2013 0858 4743",
-					"time": "2015-11-12T18:07:53.000Z",
-					"resistance": 27,
-					"precision": "int",
-					"units": "lb",
-					"repetitions": 10,
-					"peak": 324,
-					"work": 504.328125
-				}, {
-					"model": "1335",
-					"version": "3EC8495A",
-					"serial": "0124 2013 0858 4743",
-					"time": "2015-11-12T18:08:04.000Z",
-					"resistance": 27,
-					"precision": "int",
-					"units": "lb",
-					"repetitions": 10,
-					"peak": 326,
-					"work": 552
-				},
-			]
-		},
-		"1531": {
-			"position": {
-				"chest": null,
-				"rom2": null,
-				"rom1": null,
-				"seat": null
-			},
-			"reps": [
-				{
-					"model": "1531",
-					"version": "3EC8495A",
-					"serial": "0121 2013 1632 1943",
-					"time": "2015-11-12T18:08:32.000Z",
-					"resistance": 154,
-					"precision": "int",
-					"units": "lb",
-					"repetitions": 10,
-					"peak": 1156,
-					"work": 2425.953125
-				}
-			]
-		},
-		"1621": {
-			"position": {
-				"chest": null,
-				"rom2": null,
-				"rom1": null,
-				"seat": null
-			},
-			"reps": [
-				{
-					"model": "1621",
-					"version": "43597091",
-					"serial": "0730 2015 1323 2541",
-					"time": "2015-11-12T17:37:06.000Z",
-					"resistance": 18,
-					"precision": "int",
-					"units": "lb",
-					"repetitions": 10,
-					"peak": 107,
-					"work": 166.515625
-				}, {
-					"model": "1621",
-					"version": "43597091",
-					"serial": "0730 2015 1323 2541",
-					"time": "2015-11-12T17:37:23.000Z",
-					"resistance": 18,
-					"precision": "int",
-					"units": "lb",
-					"repetitions": 10,
-					"peak": 98,
-					"work": 180.734375
-				},
-			]
-		},
-		"1921": {
-			"position": {
-				"chest": null,
-				"rom2": null,
-				"rom1": null,
-				"seat": null
-			},
-			"reps": [
-				{
-					"model": "1921",
-					"version": "3EC8495A",
-					"serial": "0121 2013 1632 1944",
-					"time": "2015-11-12T18:07:16.000Z",
-					"resistance": 28,
-					"precision": "int",
-					"units": "lb",
-					"repetitions": 10,
-					"peak": 248,
-					"work": 402.578125
-				}
-			]
-		},
-		"2035": {
-			"position": {
-				"chest": null,
-				"rom2": null,
-				"rom1": null,
-				"seat": null
-			},
-			"reps": [
-				{
-					"model": "2035",
-					"version": "3EC8495A",
-					"serial": "0124 2013 0742 0534",
-					"time": "2015-11-12T18:04:48.000Z",
-					"resistance": 73,
-					"precision": "int",
-					"units": "lb",
-					"repetitions": 10,
-					"peak": 676,
-					"work": 1381.09375
-				}
-			]
-		},
-		"2121": {
-			"position": {
-				"chest": null,
-				"rom2": null,
-				"rom1": null,
-				"seat": null
-			},
-			"reps": [
-				{
-					"model": "2121",
-					"version": "3EC8495A",
-					"serial": "0121 2013 1632 1946",
-					"time": "2015-11-12T18:11:13.000Z",
-					"resistance": 33,
-					"precision": "int",
-					"units": "lb",
-					"repetitions": 10,
-					"peak": 376,
-					"work": 941.921875
-				}, {
-					"model": "2121",
-					"version": "3EC8495A",
-					"serial": "0121 2013 1632 1946",
-					"time": "2015-11-12T18:11:27.000Z",
-					"resistance": 33,
-					"precision": "int",
-					"units": "lb",
-					"repetitions": 10,
-					"peak": 530,
-					"work": 989.109375
-				},
-			]
-		},
-		"2531": {
-			"position": {
-				"chest": null,
-				"rom2": null,
-				"rom1": null,
-				"seat": null
-			},
-			"reps": [
-				{
-					"model": "2531",
-					"version": "3EC8495A",
-					"serial": "0124 2013 0742 0547",
-					"time": "2015-11-12T18:11:34.000Z",
-					"resistance": 304,
-					"precision": "int",
-					"units": "lb",
-					"repetitions": 10,
-					"peak": 1932,
-					"work": 2754.5625
-				}
-			]
-		},
-		"2936": {
-			"position": {
-				"chest": null,
-				"rom2": null,
-				"rom1": null,
-				"seat": null
-			},
-			"reps": [
-				{
-					"model": "2936",
-					"version": "3EC8495A",
-					"serial": "0124 2013 0742 0541",
-					"time": "2015-11-12T18:14:04.000Z",
-					"resistance": 37,
-					"precision": "int",
-					"units": "lb",
-					"repetitions": 23,
-					"peak": 198,
-					"work": 719.9375
-				}
-			]
-		},
-		"3010": {
-			"position": {
-				"chest": null,
-				"rom2": null,
-				"rom1": 0,
-				"seat": null
-			},
-			"reps": [
-				{
-					"model": "3010",
-					"version": "3EC8495A",
-					"serial": "0121 2013 1632 1936",
-					"time": "2015-11-12T18:02:16.000Z",
-					"resistance": 11.1,
-					"precision": "dec",
-					"units": "lb",
-					"repetitions": 10,
-					"peak": 152,
-					"work": 213.796875
-				}
-			]
-		},
-		"3020": {
-			"position": {
-				"chest": null,
-				"rom2": null,
-				"rom1": 0,
-				"seat": null
-			},
-			"reps": [
-				{
-					"model": "3020",
-					"version": "3EC8495A",
-					"serial": "0124 2013 0742 0540",
-					"time": "2015-11-12T18:05:35.000Z",
-					"resistance": 14.7,
-					"precision": "dec",
-					"units": "lb",
-					"repetitions": 10,
-					"peak": 280,
-					"work": 485.59375
-				}
-			]
-		}
-	}
-
-	data.test2 = {
-		"1335": {
-			"position": {
-				"chest": null,
 				"rom2": 3,
 				"rom1": null,
 				"seat": 3,
@@ -271,7 +15,7 @@ module.exports = function() {
 					"model": "1335",
 					"version": "3EC8495A",
 					"serial": "0124 2013 0858 4743",
-					"time": "2016-01-28T21:49:03.000Z",
+					"time": "2016-01-28T13:49:03-08:00",
 					"resistance": 84,
 					"precision": "int",
 					"units": "lb",
@@ -279,23 +23,23 @@ module.exports = function() {
 					"test": {
 						"type": "power6r",
 						"low": {
-							"Power": 485,
-							"Velocity": 226,
-							"Force": 6384,
-							"Position": 2006,
+							"power": 485,
+							"velocity": 226,
+							"force": 6384,
+							"position": 2006,
 						},
 						"high": {
-							"Power": 626,
-							"Velocity": 170,
-							"Force": 10880,
-							"Position": 1822,
+							"power": 626,
+							"velocity": 170,
+							"force": 10880,
+							"position": 1822,
 						},
 					},
 				}, {
 					"model": "1335",
 					"version": "3EC8495A",
 					"serial": "0124 2013 0858 4743",
-					"time": "2016-01-28T21:53:34.000Z",
+					"time": "2016-01-28T13:53:34-08:00",
 					"resistance": 58,
 					"precision": "int",
 					"units": "lb",
@@ -306,7 +50,7 @@ module.exports = function() {
 					"model": "1335",
 					"version": "3EC8495A",
 					"serial": "0124 2013 0858 4743",
-					"time": "2016-01-28T21:53:56.000Z",
+					"time": "2016-01-28T13:53:56-08:00",
 					"resistance": 58,
 					"precision": "int",
 					"units": "lb",
@@ -328,7 +72,7 @@ module.exports = function() {
 					"model": "1338",
 					"version": "0465B73E",
 					"serial": "0128 2016 1222 4900",
-					"time": "2016-01-28T21:22:57.000Z",
+					"time": "2016-01-28T13:22:57-08:00",
 					"resistance": 35,
 					"precision": "int",
 					"units": null,
@@ -337,7 +81,7 @@ module.exports = function() {
 					"model": "1338",
 					"version": "0465B73E",
 					"serial": "0128 2016 1222 4900",
-					"time": "2016-01-28T21:23:25.000Z",
+					"time": "2016-01-28T13:23:25-08:00",
 					"resistance": 41,
 					"precision": "int",
 					"units": null,
@@ -346,7 +90,7 @@ module.exports = function() {
 					"model": "1338",
 					"version": "0465B73E",
 					"serial": "0128 2016 1222 4900",
-					"time": "2016-01-28T21:23:45.000Z",
+					"time": "2016-01-28T13:23:45-08:00",
 					"resistance": 161,
 					"precision": "int",
 					"units": null,
@@ -355,7 +99,7 @@ module.exports = function() {
 					"model": "1338",
 					"version": "0465B73E",
 					"serial": "0128 2016 1222 4900",
-					"time": "2016-01-28T21:28:46.000Z",
+					"time": "2016-01-28T13:28:46-08:00",
 					"resistance": 51,
 					"precision": "int",
 					"units": null,
@@ -375,7 +119,7 @@ module.exports = function() {
 					"model": "2121",
 					"version": "3EC8495A",
 					"serial": "0121 2013 1632 1946",
-					"time": "2016-01-28T21:50:10.000Z",
+					"time": "2016-01-28T13:50:10-08:00",
 					"resistance": 15,
 					"precision": "int",
 					"units": "lb",
@@ -386,7 +130,7 @@ module.exports = function() {
 					"model": "2121",
 					"version": "3EC8495A",
 					"serial": "0121 2013 1632 1946",
-					"time": "2016-01-28T21:50:52.000Z",
+					"time": "2016-01-28T13:50:52-08:00",
 					"resistance": 37,
 					"precision": "int",
 					"units": "lb",
@@ -408,7 +152,7 @@ module.exports = function() {
 					"model": "2621",
 					"version": "3EC8495A",
 					"serial": "0124 2013 0858 4733",
-					"time": "2016-01-28T21:55:19.000Z",
+					"time": "2016-01-28T13:55:19-08:00",
 					"resistance": 8,
 					"precision": "int",
 					"units": "lb",
@@ -430,7 +174,7 @@ module.exports = function() {
 					"model": "3010",
 					"version": "3EC8495A",
 					"serial": "0121 2013 1632 1936",
-					"time": "2016-01-28T21:47:51.000Z",
+					"time": "2016-01-28T13:47:51-08:00",
 					"resistance": 20.6,
 					"precision": "dec",
 					"units": "lb",
@@ -441,7 +185,7 @@ module.exports = function() {
 					"model": "3010",
 					"version": "3EC8495A",
 					"serial": "0121 2013 1632 1936",
-					"time": "2016-01-28T21:48:17.000Z",
+					"time": "2016-01-28T13:48:17-08:00",
 					"resistance": 33.5,
 					"precision": "dec",
 					"units": "lb",
@@ -449,16 +193,16 @@ module.exports = function() {
 					"test": {
 						"type": "power6r",
 						"low": {
-							"Power": 246,
-							"Velocity": 168,
-							"Force": 5360,
-							"Position": 785,
+							"power": 246,
+							"velocity": 168,
+							"force": 5360,
+							"position": 785,
 						},
 						"high": {
-							"Power": 455,
-							"Velocity": 130,
-							"Force": 12848,
-							"Position": 700,
+							"power": 455,
+							"velocity": 130,
+							"force": 12848,
+							"position": 700,
 						},
 					},
 				},
@@ -476,7 +220,7 @@ module.exports = function() {
 					"model": "3020",
 					"version": "3EC8495A",
 					"serial": "0124 2013 0742 0540",
-					"time": "2016-01-28T21:48:47.000Z",
+					"time": "2016-01-28T13:48:47-08:00",
 					"resistance": 8.5,
 					"precision": "dec",
 					"units": "lb",
@@ -487,7 +231,7 @@ module.exports = function() {
 					"model": "3020",
 					"version": "3EC8495A",
 					"serial": "0124 2013 0742 0540",
-					"time": "2016-01-28T21:49:11.000Z",
+					"time": "2016-01-28T13:49:11-08:00",
 					"resistance": 8.5,
 					"precision": "dec",
 					"units": "lb",
@@ -498,7 +242,7 @@ module.exports = function() {
 					"model": "3020",
 					"version": "3EC8495A",
 					"serial": "0124 2013 0742 0540",
-					"time": "2016-01-28T21:49:18.000Z",
+					"time": "2016-01-28T13:49:18-08:00",
 					"resistance": 6553.4,
 					"precision": "dec",
 					"units": "lb",
@@ -506,23 +250,23 @@ module.exports = function() {
 					"test": {
 						"type": "power6r",
 						"low": {
-							"Power": 165,
-							"Velocity": 133,
-							"Force": 4560,
-							"Position": 864,
+							"power": 165,
+							"velocity": 133,
+							"force": 4560,
+							"position": 864,
 						},
 						"high": {
-							"Power": 621,
-							"Velocity": 117,
-							"Force": 19488,
-							"Position": 634,
+							"power": 621,
+							"velocity": 117,
+							"force": 19488,
+							"position": 634,
 						},
 					},
 				}, {
 					"model": "3020",
 					"version": "3EC8495A",
 					"serial": "0124 2013 0742 0540",
-					"time": "2016-01-28T21:49:50.000Z",
+					"time": "2016-01-28T13:49:50-08:00",
 					"resistance": 26.1,
 					"precision": "dec",
 					"units": "lb",
@@ -530,16 +274,16 @@ module.exports = function() {
 					"test": {
 						"type": "power6r",
 						"low": {
-							"Power": 264,
-							"Velocity": 149,
-							"Force": 6496,
-							"Position": 935,
+							"power": 264,
+							"velocity": 149,
+							"force": 6496,
+							"position": 935,
 						},
 						"high": {
-							"Power": 616,
-							"Velocity": 116,
-							"Force": 19504,
-							"Position": 594,
+							"power": 616,
+							"velocity": 116,
+							"force": 19504,
+							"position": 594,
 						},
 					},
 				},
@@ -557,7 +301,7 @@ module.exports = function() {
 					"model": "3232",
 					"version": "47656C39",
 					"serial": "0125 2013 0710 5633",
-					"time": "2016-01-28T21:54:17.000Z",
+					"time": "2016-01-28T13:54:17-08:00",
 					"resistance": 160,
 					"precision": "int",
 					"units": "lb",
@@ -569,7 +313,7 @@ module.exports = function() {
 					"model": "3232",
 					"version": "47656C39",
 					"serial": "0125 2013 0710 5633",
-					"time": "2016-01-28T21:54:54.000Z",
+					"time": "2016-01-28T13:54:54-08:00",
 					"resistance": 139,
 					"precision": "int",
 					"units": "lb",

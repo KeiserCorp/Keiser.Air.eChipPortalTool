@@ -86,7 +86,7 @@ module.exports = function() {
 		rep.model = byteToString(dataPage[7], dataPage[8]);
 		rep.version = byteToLongString(dataPage[12], dataPage[11], dataPage[10], dataPage[9]);
 		rep.serial = byteToSerialString(dataPage[13], dataPage[14], dataPage[15], dataPage[16], dataPage[17], rep.version);
-		rep.time = byteToTime(dataPage[0], dataPage[1], dataPage[2], dataPage[3]);
+		rep.time = moment(byteToTime(dataPage[0], dataPage[1], dataPage[2], dataPage[3])).format();
 		rep.resistance = byteToWord(dataPage[4], dataPage[5]);
 		rep.precision = PRECISION.INTEGER;
 		rep.units = null;
@@ -160,10 +160,10 @@ module.exports = function() {
 
 	var decodePackData = function(dataPage, pageOffset) {
 		var testObject = {};
-		testObject.Power = dataPage[pageOffset] + ((dataPage[pageOffset + 2] & 0x1F) << 8);
-		testObject.Velocity = dataPage[pageOffset + 1] + ((dataPage[pageOffset + 2] & 0xE0) << 3) + (((dataPage[pageOffset + 2] & 0x80) >> 7) * 0xF8);
-		testObject.Force = (dataPage[pageOffset + 3] + ((dataPage[pageOffset + 5] & 0xF0) << 4)) << 4;
-		testObject.Position = dataPage[pageOffset + 4] + ((dataPage[pageOffset + 5] & 0x0F) << 8);
+		testObject.power = dataPage[pageOffset] + ((dataPage[pageOffset + 2] & 0x1F) << 8);
+		testObject.velocity = dataPage[pageOffset + 1] + ((dataPage[pageOffset + 2] & 0xE0) << 3) + (((dataPage[pageOffset + 2] & 0x80) >> 7) * 0xF8);
+		testObject.force = (dataPage[pageOffset + 3] + ((dataPage[pageOffset + 5] & 0xF0) << 4)) << 4;
+		testObject.position = dataPage[pageOffset + 4] + ((dataPage[pageOffset + 5] & 0x0F) << 8);
 		return testObject;
 	};
 
