@@ -25,6 +25,12 @@
 					<label for="settings-erase-after-upload">Erase After Successful Upload</label>
 				</div>
 			</div>
+			<div class="uk-form-row">
+				<label class="uk-form-label">Window Mode</label>
+				<div class="uk-form-controls">
+					<button class="uk-button" v-on:click="toggleFullscreen()"><template v-if="fullscreen">Normal</template><template v-else>Fullscreen</template></button>
+				</div>
+			</div>
 		</form>
 		<div class="uk-modal-footer">
 			<button class="uk-button uk-modal-close">Cancel</button>

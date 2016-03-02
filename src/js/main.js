@@ -62,8 +62,8 @@
 	};
 
 	var webPortalTargetDomain = function() {
-		var domain,
-			url = settings.homePage;
+		var domain;
+		var url = settings.homePage;
 		if (url.indexOf("://") > -1) {
 			domain = url.split('/')[2];
 		} else {
@@ -192,7 +192,7 @@
 	 */
 	const settingsDefaults = {
 		homePage: DEFAULT_HOME,
-		eraseOnUpload: false
+		eraseOnUpload: false,
 	};
 
 	var settings = $.extend({}, settingsDefaults);
@@ -307,7 +307,12 @@
 	var settingsVue = new Vue({
 		el: '#settings-modal',
 		data: {
-			settings: settingsVueSettings
+			settings: settingsVueSettings,
+			fullscreen: chrome
+				.app
+				.window
+				.current()
+				.isFullscreen(),
 		},
 		computed: {
 			homePageValid: function() {
@@ -315,7 +320,7 @@
 			},
 			settingsValid: function() {
 				return validSettings(this.settings);
-			}
+			},
 		},
 		methods: {
 			save: function() {
@@ -323,7 +328,24 @@
 			},
 			setDefault: function() {
 				settingsVueCloneDefaultSettings();
-			}
+			},
+			toggleFullscreen: function() {
+				if (!chrome.app.window.current().isFullscreen()) {
+					chrome
+						.app
+						.window
+						.current()
+						.fullscreen();
+					this.fullscreen = true;
+				} else {
+					chrome
+						.app
+						.window
+						.current()
+						.restore();
+					this.fullscreen = false;
+				}
+			},
 		}
 	});
 

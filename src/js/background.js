@@ -2,7 +2,7 @@ var ow = require('1-wire-js');
 chrome.app.runtime.onLaunched.addListener(function (launchData) {
 	chrome.app.window.create(
 		'index.html', {
-			id: 'mainWindow',
+			id: 'eChipPortalTool',
 			state: 'maximized'
 		},
 		function (appWindow) {
