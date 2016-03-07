@@ -203,8 +203,8 @@
 			.local
 			.get(SETTINGS_KEY, function(savedSettings) {
 				$.extend(settings, savedSettings.settings);
+				webPortalInitialize();
 			});
-		webPortalInitialize();
 	};
 
 	var settingsSave = function() {
@@ -214,13 +214,13 @@
 			chrome
 				.storage
 				.local
-				.remove(SETTINGS_KEY);
-			chrome
-				.storage
-				.local
-				.set(settingsObject);
+				.remove(SETTINGS_KEY, function() {
+					chrome
+						.storage
+						.local
+						.set(settingsObject, settingsLoad());
+				});
 		}
-		settingsLoad();
 	};
 
 	var validUrl = function(url) {
