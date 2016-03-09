@@ -13,13 +13,13 @@
 	const MESSENGER_CONST = {
 		TYPE: {
 			RESPONSE: 'response',
-			REQUEST: 'request'
+			REQUEST: 'request',
 		},
 		ACTION: {
 			CONNECT: 'connect',
 			ECHIP_SET: 'echip-set',
-			ECHIP_GET: 'echip-get'
-		}
+			ECHIP_GET: 'echip-get',
+		},
 	};
 
 	/*
@@ -58,7 +58,7 @@
 		connected: false,
 		initialized: false,
 		target: '',
-		actions: []
+		actions: [],
 	};
 
 	var webPortalTargetDomain = function() {
@@ -119,7 +119,7 @@
 	}
 
 	var webPortalMessageGenerator = function() {
-		return {id: null, type: null, action: null, data: null}
+		return {id: null, type: null, action: null, data: null,}
 	};
 
 	var webPortalMessageRequestGenerator = function(action, data) {
@@ -192,7 +192,7 @@
 	 */
 	const settingsDefaults = {
 		homePage: DEFAULT_HOME,
-		eraseOnUpload: false,
+		eraseOnUpload: false
 	};
 
 	var settings = $.extend({}, settingsDefaults);
@@ -239,7 +239,7 @@
 		data: {
 			'eChipKeyState': eChip.keyState,
 			'eChipStatus': eChip.status,
-			'webPortalState': webPortalState
+			'webPortalState': webPortalState,
 		},
 		computed: {
 			uploadReady: function() {
@@ -247,7 +247,7 @@
 			},
 			downloadReady: function() {
 				return (this.webPortalState.actions.indexOf(MESSENGER_CONST.ACTION.ECHIP_GET) > -1);
-			}
+			},
 		},
 		methods: {
 			goHome: function() {
@@ -264,8 +264,8 @@
 			},
 			keyClear: function() {
 				eChip.keyClear();
-			}
-		}
+			},
+		},
 	});
 
 	/*
@@ -290,7 +290,7 @@
 			keyClear: function() {
 				eChip.keyClear();
 			}
-		}
+		},
 	});
 
 	/*
@@ -312,7 +312,7 @@
 				.app
 				.window
 				.current()
-				.isFullscreen(),
+				.isFullscreen()
 		},
 		computed: {
 			homePageValid: function() {
@@ -320,7 +320,7 @@
 			},
 			settingsValid: function() {
 				return validSettings(this.settings);
-			},
+			}
 		},
 		methods: {
 			save: function() {
@@ -345,8 +345,8 @@
 						.restore();
 					this.fullscreen = false;
 				}
-			},
-		}
+			}
+		},
 	});
 
 	var settingsVueSaveSettings = function() {
@@ -370,7 +370,7 @@
 		data: {
 			'eChipKeyState': eChip.keyState,
 			'eChipStatus': eChip.status,
-			'modalDataDisplay': 1
+			'modalDataDisplay': 1,
 		},
 		computed: {
 			keyID: function() {
@@ -390,13 +390,13 @@
 				if (this.eChipKeyState.parsedData) {
 					return eChipModalSyntaxHighlight(this.eChipKeyState.parsedData);
 				}
-			}
+			},
 		},
 		methods: {
 			keyRefresh: function() {
 				eChip.keyRefresh();
 			}
-		}
+		},
 	});
 
 	var eChipModalDataHighlight = function(data) {
@@ -447,7 +447,7 @@
 					id: eChipData
 						.rom
 						.toHexString(),
-					machines: eChipData.parsedData
+					machines: eChipData.parsedData,
 				};
 				webPortalMessageSendRequest(MESSENGER_CONST.ACTION.ECHIP_SET, messageData, webPortalSendEChipResponse);
 			});
@@ -462,7 +462,15 @@
 	};
 
 	var webPortalGetEChip = function() {
-		webPortalMessageSendRequest(MESSENGER_CONST.ACTION.ECHIP_GET, {}, webPortalGetEChipResponse);
+		eChip
+			.keyRead(function(eChipData) {
+				var messageData = {
+					id: eChipData
+						.rom
+						.toHexString()
+				};
+				webPortalMessageSendRequest(MESSENGER_CONST.ACTION.ECHIP_GET, messageData, webPortalGetEChipResponse);
+			});
 	};
 
 	var webPortalGetEChipResponse = function(messageObject) {
