@@ -39,7 +39,7 @@ gulp.task('js-bundle', function () {
 	browserify(mainScript)
 		.bundle()
 		.pipe(source(mainScript))
-		.pipe(production ? streamify(uglify()) : util.noop())
+		.pipe(production ? streamify(uglify().on('error', util.log)) : util.noop())
 		.pipe(rename({
 			dirname: '/',
 			basename: 'bundle'
