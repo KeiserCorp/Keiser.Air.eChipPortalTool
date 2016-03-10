@@ -1,42 +1,38 @@
 // UIkit
 // ========================================================================
-
 @import "uikit.less";
 // Local Styles
 // ========================================================================
 
 html,
 body {
-  margin: 0;
+  margin : 0;
   padding: 0;
-  height: 100%;
+  height : 100%;
   // Over-ride style injected by Chrome (Issue 469452)
-  font: normal 14px / 20px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font   : normal 14px / 20px "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-
 
 #web-portal-wrapper {
-  width: 100%;
-  margin: 0;
+  width  : 100%;
+  margin : 0;
   padding: 0;
-  height: ~"calc(100% - 43px)";
+  height : ~"calc(100% - 43px)";
 }
 
-
 #web-portal {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  height: ~"calc(100% - 1px)";
+  width        : 100%;
+  margin       : 0;
+  padding      : 0;
+  height       : ~"calc(100% - 1px)";
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-
 #tool-bar {
-  width: 100%;
-  height: 41px;
-  margin: 0;
-  padding: 0;
+  width        : 100%;
+  height       : 41px;
+  margin       : 0;
+  padding      : 0;
   border-radius: 0;
 
   .echip-status-tab {
@@ -44,9 +40,47 @@ body {
   }
 }
 
+.fade-transition {
+  position    : absolute;
+  top         : 30%;
+  left        : 0;
+  right       : 0;
+  margin-left : auto;
+  margin-right: auto;
+  text-align  : center;
+  padding     : 20px;
+  font-size   : 1000%;
+  overflow    : hidden;
+  transition  : opacity 1s ease;
+
+  transform   : translateY(-30%);
+
+  .toast-leave {
+    display: none;
+  }
+}
+
+.fade-enter,
+.fade-leave {
+  opacity: 0;
+}
+
+.fade-leave {
+  transition: opacity 1s ease-in, font-size 1s ease-out;
+  font-size : 1400%;
+  color     : @badge-success-background;
+
+  .toast-enter {
+    display: none;
+  }
+
+  .toast-leave {
+    display: inherit;
+  }
+}
 
 pre.syntax-highlight {
-  color: #DADADA;
+  color           : #DADADA;
   background-color: #222222;
 
   .string {
@@ -70,36 +104,32 @@ pre.syntax-highlight {
   }
 }
 
-
 ul.uk-tab + div.uk-overflow-container {
-  border: 1px solid #DDDDDD;
-  border-top: 0;
+  border                    : 1px solid #DDDDDD;
+  border-top                : 0;
   border-bottom-right-radius: 3px;
-  border-bottom-left-radius: 3px;
-  padding: 2px;
+  border-bottom-left-radius : 3px;
+  padding                   : 2px;
 
   pre {
     margin: 0;
   }
 }
 
-
 @font-face {
   font-family: "Keiser";
-  src: url("/fonts/keiser-webfont.eot");
-  src: url("/fonts/keiser-webfont.eot") format("embedded-opentype"), url("/fonts/keiser-webfont.woff") format("woff"), url("/fonts/keiser-webfont.ttf") format("truetype");
+  src        : url("/fonts/keiser-webfont.eot");
+  src        : url("/fonts/keiser-webfont.eot") format("embedded-opentype"), url("/fonts/keiser-webfont.woff") format("woff"), url("/fonts/keiser-webfont.ttf") format("truetype");
   font-weight: normal;
-  font-style: normal;
+  font-style : normal;
 }
-
 
 .keiser-font {
   font-family: "Keiser";
-  color: @keiser-red;
-  font-size: 120%;
+  color      : @keiser-red;
+  font-size  : 120%;
   line-height: 2;
 }
-
 
 .keiser-k-padding {
   letter-spacing: -0.1em;
@@ -112,6 +142,6 @@ ul.uk-tab + div.uk-overflow-container {
 }
 
 .uk-icon-spacer::before {
-  width: 3em;
+  width  : 3em;
   content: "\A0\A0\A0\A0";
 }

@@ -27,7 +27,7 @@
 	 */
 	var windowInitialize = function() {
 		setBodyAttributes();
-		settingsLoad();
+		settingsLoad(true);
 		eChip.initialize();
 	};
 
@@ -197,13 +197,15 @@
 
 	var settings = $.extend({}, settingsDefaults);
 
-	var settingsLoad = function() {
+	var settingsLoad = function(hardLoad) {
 		chrome
 			.storage
 			.local
 			.get(SETTINGS_KEY, function(savedSettings) {
 				$.extend(settings, savedSettings.settings);
-				webPortalInitialize();
+				if (hardLoad) {
+					webPortalInitialize();
+				}
 			});
 	};
 
@@ -234,12 +236,23 @@
 	/*
 	 *	Tool Bar UI Binding
 	 */
+	var requestStates = {
+		upload: false,
+		upload_init: false,
+		upload_timeout: null,
+		download: false,
+		download_init: false,
+		clear: false,
+		clear_init: false
+	};
+
 	var toolBarVue = new Vue({
 		el: '#tool-bar',
 		data: {
 			'eChipKeyState': eChip.keyState,
 			'eChipStatus': eChip.status,
 			'webPortalState': webPortalState,
+			'requestStates': requestStates,
 		},
 		computed: {
 			uploadReady: function() {
@@ -247,6 +260,57 @@
 			},
 			downloadReady: function() {
 				return (this.webPortalState.actions.indexOf(MESSENGER_CONST.ACTION.ECHIP_GET) > -1);
+			},
+			doingUpload: function() {
+				if ((this.requestStates.upload || this.requestStates.upload_init) && (this.eChipStatus.keyAction == 'get' || this.eChipStatus.keyAction == 'clear')) {
+					if (this.requestStates.upload_timeout) {
+						clearTimeout(this.requestStates.upload_timeout);
+					}
+					this.requestStates.upload = false;
+					this.requestStates.upload_init = true;
+					return true;
+				}
+				if (this.requestStates.upload && !this.requestStates.upload_init) {
+					if (!this.requestStates.upload_timeout) {
+						this.requestStates.upload_timeout = setTimeout(function() {
+							this.requestStates.upload = false;
+						}, 2000);
+					}
+					return true;
+				}
+				this.requestStates.upload_timeout = null;
+				this.requestStates.upload_init = false;
+				return false;
+			},
+			doingDownload: function() {
+				if (this.requestStates.download_init && this.eChipStatus.keyAction == 'set') {
+					return true;
+				}
+				if (this.requestStates.download && this.eChipStatus.keyAction == 'set') {
+					this.requestStates.download_init = true;
+					this.requestStates.download = false;
+					return true;
+				}
+				if (this.requestStates.download) {
+					return false;
+				}
+				this.requestStates.download_init = false;
+				return false;
+			},
+			doingClear: function() {
+				if (this.requestStates.clear_init && this.eChipStatus.keyAction == 'clear') {
+					return true;
+				}
+				if (this.requestStates.clear && this.eChipStatus.keyAction == 'clear') {
+					this.requestStates.clear_init = true;
+					this.requestStates.clear = false;
+					return true;
+				}
+				if (this.requestStates.clear) {
+					return false;
+				}
+				this.requestStates.clear_init = false;
+				return false;
 			},
 		},
 		methods: {
@@ -257,13 +321,12 @@
 				eChip.requestPermission();
 			},
 			keyUpload: function() {
+				this.requestStates.upload = true;
 				webPortalSendEChip();
 			},
 			keyDownload: function() {
+				this.requestStates.download = true;
 				webPortalGetEChip();
-			},
-			keyClear: function() {
-				eChip.keyClear();
 			},
 		},
 	});
@@ -288,6 +351,7 @@
 		},
 		methods: {
 			keyClear: function() {
+				requestStates.clear = true;
 				eChip.keyClear();
 			}
 		},
@@ -456,6 +520,7 @@
 	var webPortalSendEChipResponse = function(messageObject) {
 		if ((messageObject || {}).data && messageObject.data.success) {
 			if (settings.eraseOnUpload) {
+				requestStates.upload = true;
 				eChip.keyClear();
 			}
 		}

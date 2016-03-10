@@ -43,7 +43,8 @@ module.exports = function() {
 	};
 
 	var failedPermission = function() {
-		/* For now do nothing */};
+		/* For now do nothing */
+	};
 
 	eChip.requestPermission = function() {
 		ow

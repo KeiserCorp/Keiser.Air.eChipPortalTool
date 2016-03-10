@@ -1,4 +1,16 @@
 <nav id="tool-bar" class="uk-navbar">
+	<span transition="fade" v-if="doingDownload">
+		<i class="uk-icon-spinner uk-icon-spin toast-enter"></i>
+		<i class="uk-icon-download toast-leave"></i>
+	</span>
+	<span transition="fade" v-if="doingUpload">
+		<i class="uk-icon-spinner uk-icon-spin toast-enter"></i>
+		<i class="uk-icon-cloud-upload toast-leave"></i>
+	</span>
+	<span transition="fade" v-if="doingClear">
+		<i class="uk-icon-spinner uk-icon-spin toast-enter"></i>
+		<i class="uk-icon-eraser toast-leave"></i>
+	</span>
 	<span class="uk-navbar-brand">
     <span class="keiser-font"><span class="keiser-k-padding">K</span>EISER®</span>
 	</span>
@@ -11,7 +23,7 @@
         eChip
         <template v-if="eChipStatus.keyAction"><i class="uk-icon-spinner uk-icon-spin"></i> </template>
         <template v-if="!eChipStatus.keyAction && eChipKeyState.read && eChipKeyState.empty"><div class="uk-badge uk-badge-notification uk-badge-warning">E</div></template>
-        <template v-if="!eChipStatus.keyAction & eChipKeyState.read && !eChipKeyState.empty"><div class="uk-badge uk-badge-notification uk-badge-success">D</div></template>
+        <template v-if="!eChipStatus.keyAction && eChipKeyState.read && !eChipKeyState.empty"><div class="uk-badge uk-badge-notification uk-badge-success">D</div></template>
         <div>
         <template v-if="eChipStatus.keyAction == ''">Connected</template>
         <template v-if="eChipStatus.keyAction == 'get'">Reading</template>
