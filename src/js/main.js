@@ -273,7 +273,7 @@
 				if (this.requestStates.upload && !this.requestStates.upload_init) {
 					if (!this.requestStates.upload_timeout) {
 						this.requestStates.upload_timeout = setTimeout(function() {
-							this.requestStates.upload = false;
+							requestStates.upload = false;
 						}, 2000);
 					}
 					return true;
