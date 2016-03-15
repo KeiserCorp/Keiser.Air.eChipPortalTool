@@ -196,6 +196,7 @@
 	};
 
 	var settings = $.extend({}, settingsDefaults);
+	var lastHomePage;
 
 	var settingsLoad = function(hardLoad) {
 		chrome
@@ -203,6 +204,8 @@
 			.local
 			.get(SETTINGS_KEY, function(savedSettings) {
 				$.extend(settings, savedSettings.settings);
+				hardLoad = hardLoad || (lastHomePage != settings.homePage);
+				lastHomePage = settings.homePage;
 				if (hardLoad) {
 					webPortalInitialize();
 				}
