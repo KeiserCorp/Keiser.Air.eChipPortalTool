@@ -8,7 +8,7 @@ chrome.app.runtime.onLaunched.addListener(function (launchData) {
 		function (appWindow) {
 			appWindow.contentWindow.ow = ow;
 			appWindow.onClosed.addListener(function () {
-				ow.deviceClose();
+				ow.device.close();
 			});
 		});
 });
