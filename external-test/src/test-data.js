@@ -10,7 +10,7 @@ module.exports = function() {
 				"rom1": null,
 				"seat": 3,
 			},
-			"reps": [
+			"sets": [
 				{
 					"model": "1335",
 					"version": "3EC8495A",
@@ -67,7 +67,7 @@ module.exports = function() {
 				"rom1": null,
 				"seat": 2,
 			},
-			"reps": [
+			"sets": [
 				{
 					"model": "1338",
 					"version": "0465B73E",
@@ -114,7 +114,7 @@ module.exports = function() {
 				"rom1": null,
 				"seat": 6,
 			},
-			"reps": [
+			"sets": [
 				{
 					"model": "2121",
 					"version": "3EC8495A",
@@ -147,7 +147,7 @@ module.exports = function() {
 				"rom1": 2,
 				"seat": null,
 			},
-			"reps": [
+			"sets": [
 				{
 					"model": "2621",
 					"version": "3EC8495A",
@@ -169,7 +169,7 @@ module.exports = function() {
 				"rom1": 0,
 				"seat": null,
 			},
-			"reps": [
+			"sets": [
 				{
 					"model": "3010",
 					"version": "3EC8495A",
@@ -215,7 +215,7 @@ module.exports = function() {
 				"rom1": 0,
 				"seat": 2,
 			},
-			"reps": [
+			"sets": [
 				{
 					"model": "3020",
 					"version": "3EC8495A",
@@ -296,7 +296,7 @@ module.exports = function() {
 				"rom1": null,
 				"seat": null,
 			},
-			"reps": [
+			"sets": [
 				{
 					"model": "3232",
 					"version": "47656C39",

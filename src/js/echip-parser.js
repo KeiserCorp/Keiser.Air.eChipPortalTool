@@ -70,91 +70,91 @@ module.exports = function() {
 						}
 					};
 					var firstPage = data[pageOffset][bufferOffset + 7];
-					parseMachineRep(data, eChipObject[model], firstPage);
+					parseMachineSet(data, eChipObject[model], firstPage);
 				}
 			}
 		}
 	};
 
-	var parseMachineRep = function(data, machineObject, page) {
+	var parseMachineSet = function(data, machineObject, page) {
 		var fatBuffer = (Math.floor(page / 30) * 32) + 31;
 		var fatBufferOffset = (page % 30);
 		var nextPage = data[fatBuffer][fatBufferOffset];
 		var dataPage = data[page];
 
-		var rep = {};
-		rep.model = byteToString(dataPage[7], dataPage[8]);
-		rep.version = byteToLongString(dataPage[12], dataPage[11], dataPage[10], dataPage[9]);
-		rep.serial = byteToSerialString(dataPage[13], dataPage[14], dataPage[15], dataPage[16], dataPage[17], rep.version);
-		rep.time = moment(byteToTime(dataPage[0], dataPage[1], dataPage[2], dataPage[3])).format();
-		rep.resistance = byteToWord(dataPage[4], dataPage[5]);
-		rep.precision = PRECISION.INTEGER;
-		rep.units = null;
-		rep.repetitions = dataPage[6];
+		var set = {};
+		set.model = byteToString(dataPage[7], dataPage[8]);
+		set.version = byteToLongString(dataPage[12], dataPage[11], dataPage[10], dataPage[9]);
+		set.serial = byteToSerialString(dataPage[13], dataPage[14], dataPage[15], dataPage[16], dataPage[17], set.version);
+		set.time = moment(byteToTime(dataPage[0], dataPage[1], dataPage[2], dataPage[3])).format();
+		set.resistance = byteToWord(dataPage[4], dataPage[5]);
+		set.precision = PRECISION.INTEGER;
+		set.units = null;
+		set.repetitions = dataPage[6];
 
-		if (unitVersion(rep.version)) {
+		if (unitVersion(set.version)) {
 			if ((dataPage[17] & 0x80) == 0x80) {
-				rep.resistance = rep.resistance / 10;
-				rep.precision = PRECISION.DECIMAL;
+				set.resistance = set.resistance / 10;
+				set.precision = PRECISION.DECIMAL;
 			}
 
 			switch (dataPage[17] & 0x60) {
 				case 0x00:
-					rep.units = FORCE.LB;
+					set.units = FORCE.LB;
 					break;
 				case 0x20:
-					rep.units = FORCE.KG;
+					set.units = FORCE.KG;
 					break;
 				case 0x40:
-					rep.units = FORCE.NE;
+					set.units = FORCE.NE;
 					break;
 				case 0x60:
-					rep.units = FORCE.ER;
+					set.units = FORCE.ER;
 					break;
 			}
 		}
 
-		if (testVersion(rep.version)) {
-			if (rep.repetitions <= 254 && rep.repetitions >= 252) {
-				rep.test = {};
-				switch (rep.repetitions) {
+		if (testVersion(set.version)) {
+			if (set.repetitions <= 254 && set.repetitions >= 252) {
+				set.test = {};
+				switch (set.repetitions) {
 					case 254:
-						rep.test.type = POWER_TEST;
-						rep.test.low = decodePackData(dataPage, 18);
-						rep.test.high = decodePackData(dataPage, 24);
-						rep.repetitions = 6;
+						set.test.type = POWER_TEST;
+						set.test.low = decodePackData(dataPage, 18);
+						set.test.high = decodePackData(dataPage, 24);
+						set.repetitions = 6;
 						break;
 					case 253:
-						rep.test.type = A420_6R_TEST;
-						rep.repetitions = 6;
+						set.test.type = A420_6R_TEST;
+						set.repetitions = 6;
 						break;
 					case 252:
-						rep.test.type = A420_10R_TEST;
-						rep.repetitions = 10;
+						set.test.type = A420_10R_TEST;
+						set.repetitions = 10;
 						break;
 				}
 			} else {
-				if (peakPowerVersion(rep.version)) {
-					rep.peak = byteToWord(dataPage[20], dataPage[21]);
-					rep.work = Math.round(byteToLongWord(dataPage[22], dataPage[23], dataPage[24], dataPage[25]) / 64);
-					//rep.work = byteToLongWord(dataPage[22], dataPage[23], dataPage[24], dataPage[25]) / 64;
+				if (peakPowerVersion(set.version)) {
+					set.peak = byteToWord(dataPage[20], dataPage[21]);
+					set.work = Math.round(byteToLongWord(dataPage[22], dataPage[23], dataPage[24], dataPage[25]) / 64);
+					//set.work = byteToLongWord(dataPage[22], dataPage[23], dataPage[24], dataPage[25]) / 64;
 
-					if ((parseInt(rep.model, 16) & 0xFF00) == 0x3200) {
-						rep.distance = byteToWord(dataPage[18], dataPage[19]);
+					if ((parseInt(set.model, 16) & 0xFF00) == 0x3200) {
+						set.distance = byteToWord(dataPage[18], dataPage[19]);
 					}
 				}
 			}
 		}
 
-		if (!machineObject.reps) {
-			machineObject.reps = [];
+		if (!machineObject.sets) {
+			machineObject.sets = [];
 		}
 		machineObject
-			.reps
-			.push(rep);
+			.sets
+			.push(set);
 
 		if (nextPage != 254 && nextPage != 31 && nextPage != 32) {
-			parseMachineRep(data, machineObject, nextPage);
+			parseMachineSet(data, machineObject, nextPage);
 		}
 	};
 
@@ -216,14 +216,14 @@ module.exports = function() {
 				data[pageOffset][bufferOffset + 7] = recordIndex;
 
 				attributes
-					.reps
-					.forEach(function(rep, index) {
+					.sets
+					.forEach(function(set, index) {
 						var recordPage = (Math.floor(recordIndex / 30) * 32) + (recordIndex % 30);
-						buildMachineRep(rep, attributes.position, data[recordPage]);
+						buildMachineSet(set, attributes.position, data[recordPage]);
 
 						var fatPage = (Math.floor(recordIndex / 30) * 32) + 31;
 						var fatPageOffset = recordIndex % 30;
-						data[fatPage][fatPageOffset] = (index + 1 < attributes.reps.length)
+						data[fatPage][fatPageOffset] = (index + 1 < attributes.sets.length)
 							? recordIndex + 1
 							: 0xFE;
 
@@ -239,17 +239,17 @@ module.exports = function() {
 		return data;
 	};
 
-	var buildMachineRep = function(rep, position, page) {
-		var time = timeToByte(rep.time);
-		var resistance = wordToByte(rep.resistance);
-		if (rep.precision == PRECISION.DECIMAL) {
-			resistance = wordToByte(rep.resistance * 10);
+	var buildMachineSet = function(set, position, page) {
+		var time = timeToByte(set.time);
+		var resistance = wordToByte(set.resistance);
+		if (set.precision == PRECISION.DECIMAL) {
+			resistance = wordToByte(set.resistance * 10);
 		}
-		var reps = repToByte(rep.repetitions, rep.test);
-		var model = wordToByte(parseInt(rep.model, 16));
-		var version = longWordToByte(parseInt(rep.version, 16));
-		var serialTime = serialStringToTimeByte(rep.serial);
-		var channel = serialStringToChannelByte(rep.serial, rep.version, rep.precision, rep.units);
+		var repetitions = repToByte(set.repetitions, set.test);
+		var model = wordToByte(parseInt(set.model, 16));
+		var version = longWordToByte(parseInt(set.version, 16));
+		var serialTime = serialStringToTimeByte(set.serial);
+		var channel = serialStringToChannelByte(set.serial, set.version, set.precision, set.units);
 
 		page[0] = time[3];
 		page[1] = time[2];
@@ -257,7 +257,7 @@ module.exports = function() {
 		page[3] = time[0];
 		page[4] = resistance[1];
 		page[5] = resistance[0];
-		page[6] = reps;
+		page[6] = repetitions;
 		page[7] = model[1];
 		page[8] = model[0];
 		page[9] = version[0];
@@ -270,22 +270,22 @@ module.exports = function() {
 		page[16] = serialTime[0];
 		page[17] = channel;
 
-		if (rep.test) {
-			buildMachineTestData(rep, page);
+		if (set.test) {
+			buildMachineTestData(set, page);
 		} else {
-			buildMachineNormalData(rep, position, page);
+			buildMachineNormalData(set, position, page);
 		}
 
 	};
 
-	var buildMachineTestData = function(rep, page) {
+	var buildMachineTestData = function(set, page) {
 		// Need to add repack data
 	};
 
-	var buildMachineNormalData = function(rep, position, page) {
-		if (peakPowerVersion(rep.version)) {
-			var peak = wordToByte(rep.peak);
-			var work = longWordToByte(rep.work * 64);
+	var buildMachineNormalData = function(set, position, page) {
+		if (peakPowerVersion(set.version)) {
+			var peak = wordToByte(set.peak);
+			var work = longWordToByte(set.work * 64);
 			var seat = (position.seat == null)
 				? 0xFF
 				: position.seat;
@@ -299,8 +299,8 @@ module.exports = function() {
 				? 0xFF
 				: position.chest;
 
-			if ((parseInt(rep.model, 16) & 0xFF00) == 0x3200) {
-				var distance = wordToByte(rep.distance);
+			if ((parseInt(set.model, 16) & 0xFF00) == 0x3200) {
+				var distance = wordToByte(set.distance);
 				page[18] = distance[1];
 				page[19] = distance[0];
 			} else {
@@ -460,22 +460,22 @@ module.exports = function() {
 		return channel;
 	};
 
-	var repToByte = function(reps, test) {
-		var repsValue = reps;
+	var repToByte = function(repetitions, test) {
+		var repetitionsValue = repetitions;
 		if (test) {
 			switch (test) {
 				case POWER_TEST:
-					repsValue = 254;
+					repetitionsValue = 254;
 					break;
 				case A420_6R_TEST:
-					repsValue = 253;
+					repetitionsValue = 253;
 					break;
 				case A420_10R_TEST:
-					repsValue = 252;
+					repetitionsValue = 252;
 					break;
 			}
 		}
-		return repsValue;
+		return repetitionsValue;
 	};
 
 	var valueOrNull = function(value) {

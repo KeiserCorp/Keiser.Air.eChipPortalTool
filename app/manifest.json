@@ -3,7 +3,7 @@
 	"name": "Keiser eChip Portal Tool",
 	"short_name": "eChip Portal",
 	"description": "Chrome web portal which allows communication with the Keiser eChip system using the 1-Wire® communication protocol.",
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"minimum_chrome_version": "42",
 	"kiosk_enabled": true,
 
