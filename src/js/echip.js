@@ -1,5 +1,6 @@
 module.exports = function() {
 	'use strict';
+	var development = process.env.NODE_ENV !== 'production';
 	var $ = require('jquery');
 	var ow = window.ow;
 	var eChipParser = require('./echip-parser.js');
@@ -13,7 +14,7 @@ module.exports = function() {
 		deviceConnected: false,
 		keyConnected: false,
 		keyAction: '',
-		error: '',
+		error: ''
 	};
 
 	/*
@@ -80,6 +81,9 @@ module.exports = function() {
 	};
 
 	var deviceOpened = function() {
+		if (development) {
+			console.log("Reader Connected");
+		}
 		eChip.status.deviceConnected = true;
 		ow
 			.device
@@ -95,7 +99,7 @@ module.exports = function() {
 		data: null,
 		parsedData: null,
 		read: false,
-		empty: true,
+		empty: true
 	};
 
 	eChip.keyState = $.extend({}, keyStateDefault);
@@ -109,7 +113,7 @@ module.exports = function() {
 			data: null,
 			parsedData: null,
 			read: false,
-			empty: true,
+			empty: true
 		});
 	};
 
@@ -118,6 +122,9 @@ module.exports = function() {
 	 */
 	var keyAwait = function() {
 		var interruptTimeout = function(result) {
+			if (development) {
+				console.log("eChip Detected: " + ((result.ResultRegisters || {}).DetectKey || false));
+			}
 			if (result.ResultRegisters && result.ResultRegisters.DetectKey) {
 				keyGetRom()
 					.fail(function() {
@@ -168,6 +175,9 @@ module.exports = function() {
 
 	var keyMonitor = function() {
 		setTimeout(function() {
+			if (development) {
+				console.log("eChip Action Queued: " + keyMonitorQueue.hasNext());
+			}
 			ow
 				.key
 				.searchFirst()
@@ -194,6 +204,9 @@ module.exports = function() {
 			.key
 			.searchFirst()
 			.then(function(rom) {
+				if (development) {
+					console.log("eChip ID: " + JSON.stringify(rom));
+				}
 				if (rom[0] === 0x0C) {
 					eChip.keyState.rom = rom;
 					eChip.status.keyConnected = true;
