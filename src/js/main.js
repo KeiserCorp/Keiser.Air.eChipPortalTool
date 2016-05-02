@@ -8,7 +8,7 @@
 	/*
 	 *	Constants
 	 */
-	const DEFAULT_HOME = 'http://kmetrics.dev.devxer.com';
+	const DEFAULT_HOME = 'http://devx.keiser.com/echip/';
 	const SETTINGS_KEY = 'settings';
 	const MESSENGER_CONST = {
 		TYPE: {
