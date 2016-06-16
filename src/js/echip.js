@@ -135,7 +135,10 @@ module.exports = function() {
 				eChip.status.keyAction = '';
 				eChip.status.error = '';
 				keyStateClear();
-				keyAwait();
+				var timer = setTimeout(function() {
+					keyAwait();
+				}, 50);
+				//keyAwait();
 			}
 		};
 		ow

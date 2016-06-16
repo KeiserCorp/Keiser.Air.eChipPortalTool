@@ -15,6 +15,7 @@
   "homepage": "https://github.com/KeiserCorp/eChip-Portal-Tool#readme",
   "scripts": {
     "build": "gulp",
+    "distribute": "gulp --production",
     "watch": "gulp watch"
   },
   "browserify": {

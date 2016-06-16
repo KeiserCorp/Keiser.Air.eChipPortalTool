@@ -13,13 +13,13 @@
 	const MESSENGER_CONST = {
 		TYPE: {
 			RESPONSE: 'response',
-			REQUEST: 'request',
+			REQUEST: 'request'
 		},
 		ACTION: {
 			CONNECT: 'connect',
 			ECHIP_SET: 'echip-set',
-			ECHIP_GET: 'echip-get',
-		},
+			ECHIP_GET: 'echip-get'
+		}
 	};
 
 	/*
@@ -58,7 +58,7 @@
 		connected: false,
 		initialized: false,
 		target: '',
-		actions: [],
+		actions: []
 	};
 
 	var webPortalTargetDomain = function() {
@@ -119,7 +119,7 @@
 	}
 
 	var webPortalMessageGenerator = function() {
-		return {id: null, type: null, action: null, data: null,}
+		return {id: null, type: null, action: null, data: null}
 	};
 
 	var webPortalMessageRequestGenerator = function(action, data) {
@@ -192,7 +192,7 @@
 	 */
 	const settingsDefaults = {
 		homePage: DEFAULT_HOME,
-		eraseOnUpload: false
+		eraseOnUpload: false,
 	};
 
 	var settings = $.extend({}, settingsDefaults);
@@ -246,7 +246,7 @@
 		download: false,
 		download_init: false,
 		clear: false,
-		clear_init: false
+		clear_init: false,
 	};
 
 	var toolBarVue = new Vue({
@@ -255,7 +255,7 @@
 			'eChipKeyState': eChip.keyState,
 			'eChipStatus': eChip.status,
 			'webPortalState': webPortalState,
-			'requestStates': requestStates,
+			'requestStates': requestStates
 		},
 		computed: {
 			uploadReady: function() {
@@ -314,7 +314,7 @@
 				}
 				this.requestStates.clear_init = false;
 				return false;
-			},
+			}
 		},
 		methods: {
 			goHome: function() {
@@ -330,8 +330,8 @@
 			keyDownload: function() {
 				this.requestStates.download = true;
 				webPortalGetEChip();
-			},
-		},
+			}
+		}
 	});
 
 	/*
@@ -357,7 +357,7 @@
 				requestStates.clear = true;
 				eChip.keyClear();
 			}
-		},
+		}
 	});
 
 	/*
@@ -379,7 +379,7 @@
 				.app
 				.window
 				.current()
-				.isFullscreen()
+				.isFullscreen(),
 		},
 		computed: {
 			homePageValid: function() {
@@ -387,7 +387,7 @@
 			},
 			settingsValid: function() {
 				return validSettings(this.settings);
-			}
+			},
 		},
 		methods: {
 			save: function() {
@@ -412,8 +412,8 @@
 						.restore();
 					this.fullscreen = false;
 				}
-			}
-		},
+			},
+		}
 	});
 
 	var settingsVueSaveSettings = function() {
@@ -437,7 +437,7 @@
 		data: {
 			'eChipKeyState': eChip.keyState,
 			'eChipStatus': eChip.status,
-			'modalDataDisplay': 1,
+			'modalDataDisplay': 1
 		},
 		computed: {
 			keyID: function() {
@@ -457,27 +457,30 @@
 				if (this.eChipKeyState.parsedData) {
 					return eChipModalSyntaxHighlight(this.eChipKeyState.parsedData);
 				}
-			},
+			}
 		},
 		methods: {
 			keyRefresh: function() {
 				eChip.keyRefresh();
 			}
-		},
+		}
 	});
 
 	var eChipModalDataHighlight = function(data) {
 		var output = '';
 		var page = 0;
-		data.forEach(function(row) {
-			output += '[<span class="key">' + ('000' + (page++)).substr(-3) + '</span>] <span class="string">';
-			row.forEach(function(column) {
-				output += ('00' + column.toString(16))
-					.substr(-2)
-					.toUpperCase();
-			});
-			output += '</span>\n';
-		});
+		if (data) {
+			data
+				.forEach(function(row) {
+					output += '[<span class="key">' + ('000' + (page++)).substr(-3) + '</span>] <span class="string">';
+					row.forEach(function(column) {
+						output += ('00' + column.toString(16))
+							.substr(-2)
+							.toUpperCase();
+					});
+					output += '</span>\n';
+				});
+		}
 		return output;
 	};
 
@@ -514,7 +517,7 @@
 					id: eChipData
 						.rom
 						.toHexString(),
-					machines: eChipData.parsedData,
+					machines: eChipData.parsedData
 				};
 				webPortalMessageSendRequest(MESSENGER_CONST.ACTION.ECHIP_SET, messageData, webPortalSendEChipResponse);
 			});

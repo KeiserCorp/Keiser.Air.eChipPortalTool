@@ -77,7 +77,29 @@ module.exports = function() {
 	};
 
 	var parseMachineSet = function(data, machineObject, page) {
-		var fatBuffer = (Math.floor(page / 30) * 32) + 31;
+		// Needs to be refactored to function
+		var fatBuffer = 31;
+		if (page > 31) {
+			fatBuffer = 63;
+		}
+		if (page > 63) {
+			fatBuffer = 95;
+		}
+		if (page > 95) {
+			fatBuffer = 127;
+		}
+		if (page > 127) {
+			fatBuffer = 159;
+		}
+		if (page > 159) {
+			fatBuffer = 191;
+		}
+		if (page > 191) {
+			fatBuffer = 223;
+		}
+		if (page > 223) {
+			fatBuffer = 255;
+		}
 		var fatBufferOffset = (page % 30);
 		var nextPage = data[fatBuffer][fatBufferOffset];
 		var dataPage = data[page];
