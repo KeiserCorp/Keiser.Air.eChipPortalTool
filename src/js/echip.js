@@ -225,7 +225,7 @@ module.exports = function() {
 	/*
 	 *	Key Data Methods
 	 */
-	var keyGetData = function(retry) {
+	var keyGetData = function(retryCount) {
 		eChip.status.keyAction = 'get';
 		keyStateDataClear();
 		return ow
@@ -235,7 +235,7 @@ module.exports = function() {
 				return keySetData(data);
 			})
 			.fail(function(error) {
-				if (retry) {
+				if (retryCount > 3) {
 					console.log('Memory Read Error: ' + error.message + ' [Cancelled]');
 					eChip.status.error = 'Memory Read Error';
 				} else {
@@ -244,7 +244,10 @@ module.exports = function() {
 						.device
 						.reset()
 						.then(function() {
-							return keyGetData(true);
+							if (!retryCount) {
+								retryCount = 0;
+							}
+							return keyGetData(++retryCount);
 						});
 				}
 			});
