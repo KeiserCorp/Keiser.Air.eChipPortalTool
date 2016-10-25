@@ -77,29 +77,7 @@ module.exports = function() {
 	};
 
 	var parseMachineSet = function(data, machineObject, page) {
-		// Needs to be refactored to function
-		var fatBuffer = 31;
-		if (page > 31) {
-			fatBuffer = 63;
-		}
-		if (page > 63) {
-			fatBuffer = 95;
-		}
-		if (page > 95) {
-			fatBuffer = 127;
-		}
-		if (page > 127) {
-			fatBuffer = 159;
-		}
-		if (page > 159) {
-			fatBuffer = 191;
-		}
-		if (page > 191) {
-			fatBuffer = 223;
-		}
-		if (page > 223) {
-			fatBuffer = 255;
-		}
+		var fatBuffer = (Math.floor(page / 32) * 32) + 31;
 		var fatBufferOffset = (page % 30);
 		var nextPage = data[fatBuffer][fatBufferOffset];
 		var dataPage = data[page];
@@ -175,7 +153,7 @@ module.exports = function() {
 			.sets
 			.push(set);
 
-		if (nextPage != 254 && nextPage != 31 && nextPage != 32) {
+		if ((nextPage & 30) != 30) {
 			parseMachineSet(data, machineObject, nextPage);
 		}
 	};
@@ -214,7 +192,7 @@ module.exports = function() {
 	eCp.build = function(machines) {
 		var data = eCp.buildEmpty();
 		const maxDirectories = 24;
-		const maxRecords = 240;
+		const maxRecords = 242;
 		var directoryIndex = 0;
 		var recordIndex = 0;
 
@@ -245,9 +223,9 @@ module.exports = function() {
 
 						var fatPage = (Math.floor(recordIndex / 30) * 32) + 31;
 						var fatPageOffset = recordIndex % 30;
-						data[fatPage][fatPageOffset] = (index + 1 < attributes.sets.length)
-							? recordIndex + 1
-							: 0xFE;
+						data[fatPage][fatPageOffset] = (index + 1 < attributes.sets.length) ?
+							recordIndex + 1 :
+							0xFE;
 
 						recordIndex++;
 					});
@@ -308,18 +286,18 @@ module.exports = function() {
 		if (peakPowerVersion(set.version)) {
 			var peak = wordToByte(set.peak);
 			var work = longWordToByte(set.work * 64);
-			var seat = (position.seat == null)
-				? 0xFF
-				: position.seat;
-			var rom1 = (position.rom1 == null)
-				? 0xFF
-				: position.rom1;
-			var rom2 = (position.rom2 == null)
-				? 0xFF
-				: position.rom2;
-			var chest = (position.chest == null)
-				? 0xFF
-				: position.chest;
+			var seat = (position.seat == null) ?
+				0xFF :
+				position.seat;
+			var rom1 = (position.rom1 == null) ?
+				0xFF :
+				position.rom1;
+			var rom2 = (position.rom2 == null) ?
+				0xFF :
+				position.rom2;
+			var chest = (position.chest == null) ?
+				0xFF :
+				position.chest;
 
 			if ((parseInt(set.model, 16) & 0xFF00) == 0x3200) {
 				var distance = wordToByte(set.distance);
@@ -385,9 +363,9 @@ module.exports = function() {
 	 *	Helper Methods
 	 */
 	var positionToByte = function(value) {
-		return (value == null)
-			? 0xFF
-			: value;
+		return (value == null) ?
+			0xFF :
+			value;
 	};
 
 	var byteToWord = function(lsb, msb) {
@@ -501,9 +479,9 @@ module.exports = function() {
 	};
 
 	var valueOrNull = function(value) {
-		return (value === 255)
-			? null
-			: value;
+		return (value === 255) ?
+			null :
+			value;
 	};
 
 	var emptyPage = function(page) {
