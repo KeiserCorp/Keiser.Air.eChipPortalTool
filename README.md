@@ -12,8 +12,7 @@ The tool is available for install from the [Chrome Web Store] (https://chrome.go
 5. Navigate to the repository location and select the **app** directory.
 6. Click **Launch** to start the app from the extensions page.
 
-## Contributors
-- [bayssmekanique](https://github.com/bayssmekanique)
-
 ## Copyright and License
-Copyright [Keiser Corporation](http://keiser.com/) under the [MIT license](LICENSE.md).
+Copyright 2016 [Keiser Corporation](http://keiser.com/).
+
+Licensed under the [MIT license](LICENSE.md).
