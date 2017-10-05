@@ -2,7 +2,7 @@
 ## Project
 Chrome web portal which allows communication with the Keiser eChip system using the 1-Wire® communication protocol.
 
-The tool is available for install from the [Chrome Web Store] (https://chrome.google.com/webstore/detail/keiser-echip-portal-tool/fkfpigfgfahilhgebofkodnjinmjlkbf).
+The tool is available for install from the [Chrome Web Store](https://chrome.google.com/webstore/detail/keiser-echip-portal-tool/fkfpigfgfahilhgebofkodnjinmjlkbf).
 
 ## Instructions
 1. To test the portal tool, clone the repository to your local drive.
