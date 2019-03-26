@@ -1,4 +1,5 @@
 # Keiser eChip to CRM Portal Tool
+KeiserCorp/Keiser.MvxPlugins.BikeReceiver
 ## Project
 Chrome web portal which allows communication with the Keiser eChip system using the 1-Wire® communication protocol.
 
